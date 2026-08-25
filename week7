@@ -1,0 +1,620 @@
+________________________________________
+1. Introduction to Object Modeling
+Task 1: Design Parking System – LeetCode
+Concept
+Create a class that models a real-world parking system.
+There are three types of parking spaces:
+•	Big 
+•	Medium 
+•	Small 
+Java Solution
+class ParkingSystem {
+
+    private int big;
+    private int medium;
+    private int small;
+
+    public ParkingSystem(int big, int medium, int small) {
+        this.big = big;
+        this.medium = medium;
+        this.small = small;
+    }
+
+    public boolean addCar(int carType) {
+
+        if (carType == 1 && big > 0) {
+            big--;
+            return true;
+        }
+
+        if (carType == 2 && medium > 0) {
+            medium--;
+            return true;
+        }
+
+        if (carType == 3 && small > 0) {
+            small--;
+            return true;
+        }
+
+        return false;
+    }
+}
+Example
+ParkingSystem(1, 1, 0)
+
+addCar(1) → true
+addCar(2) → true
+addCar(3) → false
+OOP Concepts
+Class       → ParkingSystem
+Attributes  → big, medium, small
+Constructor → initializes parking spaces
+Method      → addCar()
+Encapsulation → private variables
+________________________________________
+2. Task 2: Java Instanceof Keyword – HackerRank
+Concept
+The instanceof operator checks whether an object belongs to a particular class.
+Java Solution
+class Student {
+}
+
+class Rockstar {
+}
+
+class Hacker {
+}
+
+public class InstanceOFTutorial {
+
+    public static void main(String[] args) {
+
+        Student student = new Student();
+        Rockstar rockstar = new Rockstar();
+        Hacker hacker = new Hacker();
+
+        Object[] objects = {
+            student,
+            rockstar,
+            hacker
+        };
+
+        int studentCount = 0;
+        int rockstarCount = 0;
+        int hackerCount = 0;
+
+        for (Object obj : objects) {
+
+            if (obj instanceof Student) {
+                studentCount++;
+            }
+
+            if (obj instanceof Rockstar) {
+                rockstarCount++;
+            }
+
+            if (obj instanceof Hacker) {
+                hackerCount++;
+            }
+        }
+
+        System.out.println(
+            studentCount + " " +
+            rockstarCount + " " +
+            hackerCount
+        );
+    }
+}
+Important Syntax
+if (obj instanceof Student)
+means:
+"Is obj an object of type Student?"
+________________________________________
+3. Class-to-Class Interaction
+Task 3: Design Underground System – LeetCode
+Concept
+This problem demonstrates interaction between multiple classes/data structures.
+We need to:
+1.	Check in a passenger. 
+2.	Check out the passenger. 
+3.	Calculate average travel time between stations. 
+Java Solution
+import java.util.*;
+
+class UndergroundSystem {
+
+    class CheckIn {
+        String station;
+        int time;
+
+        CheckIn(String station, int time) {
+            this.station = station;
+            this.time = time;
+        }
+    }
+
+    class Travel {
+        int totalTime;
+        int count;
+
+        Travel(int totalTime, int count) {
+            this.totalTime = totalTime;
+            this.count = count;
+        }
+    }
+
+    private Map<Integer, CheckIn> checkIns;
+    private Map<String, Travel> travels;
+
+    public UndergroundSystem() {
+        checkIns = new HashMap<>();
+        travels = new HashMap<>();
+    }
+
+    public void checkIn(
+            int id,
+            String stationName,
+            int t) {
+
+        checkIns.put(
+            id,
+            new CheckIn(stationName, t)
+        );
+    }
+
+    public void checkOut(
+            int id,
+            String stationName,
+            int t) {
+
+        CheckIn start = checkIns.get(id);
+
+        int travelTime = t - start.time;
+
+        String key =
+            start.station + "->" + stationName;
+
+        if (!travels.containsKey(key)) {
+
+            travels.put(
+                key,
+                new Travel(travelTime, 1)
+            );
+
+        } else {
+
+            Travel travel = travels.get(key);
+
+            travel.totalTime += travelTime;
+            travel.count++;
+        }
+
+        checkIns.remove(id);
+    }
+
+    public double getAverageTime(
+            String startStation,
+            String endStation) {
+
+        String key =
+            startStation + "->" + endStation;
+
+        Travel travel = travels.get(key);
+
+        return (double) travel.totalTime /
+               travel.count;
+    }
+}
+Main OOP Idea
+UndergroundSystem
+      |
+      +---- CheckIn
+      |
+      +---- Travel
+The classes work together to model the system.
+________________________________________
+4. Task 4: Design Browser History – LeetCode
+Concept
+Create a class representing browser history.
+Operations:
+visit()
+back()
+forward()
+Java Solution
+import java.util.*;
+
+class BrowserHistory {
+
+    private List<String> history;
+    private int current;
+
+    public BrowserHistory(String homepage) {
+
+        history = new ArrayList<>();
+
+        history.add(homepage);
+
+        current = 0;
+    }
+
+    public void visit(String url) {
+
+        // Remove forward history
+        while (history.size() > current + 1) {
+            history.remove(history.size() - 1);
+        }
+
+        history.add(url);
+
+        current++;
+    }
+
+    public String back(int steps) {
+
+        current = Math.max(0, current - steps);
+
+        return history.get(current);
+    }
+
+    public String forward(int steps) {
+
+        current = Math.min(
+            history.size() - 1,
+            current + steps
+        );
+
+        return history.get(current);
+    }
+}
+Example
+Homepage = google.com
+
+visit("facebook.com")
+visit("youtube.com")
+
+back(1)
+→ facebook.com
+
+forward(1)
+→ youtube.com
+OOP Concepts
+Class
+Attributes
+Constructor
+Methods
+Encapsulation
+________________________________________
+5. Class-to-Method Interaction
+Task 5: Design HashSet – LeetCode
+Concept
+Implement a HashSet without using Java's built-in HashSet.
+For the LeetCode constraints, a simple boolean array is sufficient.
+Java Solution
+class MyHashSet {
+
+    private boolean[] data;
+
+    public MyHashSet() {
+
+        data = new boolean[1000001];
+    }
+
+    public void add(int key) {
+
+        data[key] = true;
+    }
+
+    public void remove(int key) {
+
+        data[key] = false;
+    }
+
+    public boolean contains(int key) {
+
+        return data[key];
+    }
+}
+Example
+MyHashSet set = new MyHashSet();
+
+set.add(5);
+
+set.contains(5)
+→ true
+
+set.remove(5);
+
+set.contains(5)
+→ false
+OOP Structure
+MyHashSet
+ |
+ +-- add()
+ |
+ +-- remove()
+ |
+ +-- contains()
+________________________________________
+6. Task 6: Grading Students – HackerRank
+Rule
+If the grade is less than 38, do not round it.
+Otherwise:
+•	Find the next multiple of 5. 
+•	If the difference is less than 3, round up. 
+Java Solution
+import java.util.*;
+
+public class Solution {
+
+    public static List<Integer> gradingStudents(
+            List<Integer> grades) {
+
+        List<Integer> result =
+            new ArrayList<>();
+
+        for (int grade : grades) {
+
+            if (grade < 38) {
+
+                result.add(grade);
+
+            } else {
+
+                int nextMultiple =
+                    ((grade / 5) + 1) * 5;
+
+                if (nextMultiple - grade < 3) {
+                    grade = nextMultiple;
+                }
+
+                result.add(grade);
+            }
+        }
+
+        return result;
+    }
+}
+Example
+Input:
+73
+67
+38
+33
+
+Output:
+75
+67
+40
+33
+Pattern
+73 → 75
+67 → 67
+38 → 40
+33 → 33
+________________________________________
+7. Inheritance
+Task 7: Java Inheritance 1 – HackerRank
+Concept
+A child class inherits properties and methods from a parent class.
+Java Solution
+class Animal {
+
+    void walk() {
+        System.out.println("I am walking");
+    }
+}
+
+class Bird extends Animal {
+
+    void fly() {
+        System.out.println("I am flying");
+    }
+
+    void sing() {
+        System.out.println("I am singing");
+    }
+}
+
+public class Solution {
+
+    public static void main(String[] args) {
+
+        Bird bird = new Bird();
+
+        bird.walk();
+        bird.fly();
+        bird.sing();
+    }
+}
+Output
+I am walking
+I am flying
+I am singing
+Inheritance Structure
+       Animal
+          |
+          ↓
+         Bird
+Bird inherits walk() from Animal.
+________________________________________
+8. Task 8: Java Inheritance 2 – HackerRank
+Concept
+This demonstrates multilevel inheritance.
+Animal
+  ↓
+Bird
+Java Solution
+class Arithmetic {
+
+    public int add(int a, int b) {
+        return a + b;
+    }
+}
+
+class Adder extends Arithmetic {
+}
+
+public class Solution {
+
+    public static void main(String[] args) {
+
+        Adder adder = new Adder();
+
+        System.out.println(
+            "My superclass is: " +
+            adder.getClass()
+                 .getSuperclass()
+                 .getName()
+        );
+
+        System.out.println(
+            adder.add(10, 32) + " " +
+            adder.add(10, 3) + " " +
+            adder.add(10, 10)
+        );
+    }
+}
+Output
+My superclass is: Arithmetic
+42 13 20
+Main Concept
+class Adder extends Arithmetic
+means Adder inherits the add() method from Arithmetic.
+________________________________________
+9. Designing Reusable Classes
+Task 9: Java Generics – HackerRank
+Concept
+Generics allow a class or method to work with different data types while maintaining type safety.
+Java Solution
+class Printer {
+
+    public <T> void printArray(T[] array) {
+
+        for (T element : array) {
+            System.out.println(element);
+        }
+    }
+}
+Example
+Integer[] numbers = {1, 2, 3};
+
+String[] names = {
+    "Java",
+    "Python",
+    "C++"
+};
+
+Printer printer = new Printer();
+
+printer.printArray(numbers);
+printer.printArray(names);
+Output
+1
+2
+3
+Java
+Python
+C++
+Generic Method
+<T> void printArray(T[] array)
+Here T can represent:
+Integer
+String
+Double
+Character
+and many other reference types.
+________________________________________
+10. Task 10: Throne Inheritance – LeetCode
+Concept
+This is an excellent object-modeling problem.
+We maintain:
+•	King 
+•	Children 
+•	Birth order 
+•	Death status 
+•	Inheritance order 
+Java Solution
+import java.util.*;
+
+class ThroneInheritance {
+
+    private String king;
+    private Map<String, List<String>> children;
+    private Set<String> dead;
+
+    public ThroneInheritance(String kingName) {
+
+        king = kingName;
+
+        children = new HashMap<>();
+        dead = new HashSet<>();
+
+        children.put(kingName, new ArrayList<>());
+    }
+
+    public void birth(
+            String parentName,
+            String childName) {
+
+        children
+            .computeIfAbsent(
+                parentName,
+                k -> new ArrayList<>()
+            )
+            .add(childName);
+
+        children.put(
+            childName,
+            new ArrayList<>()
+        );
+    }
+
+    public void death(String name) {
+
+        dead.add(name);
+    }
+
+    public List<String> getInheritanceOrder() {
+
+        List<String> result =
+            new ArrayList<>();
+
+        dfs(king, result);
+
+        return result;
+    }
+
+    private void dfs(
+            String person,
+            List<String> result) {
+
+        if (!dead.contains(person)) {
+            result.add(person);
+        }
+
+        for (String child :
+             children.get(person)) {
+
+            dfs(child, result);
+        }
+    }
+}
+Example
+King
+ ├── Alice
+ │    └── Bob
+ └── Charlie
+If Alice dies:
+Inheritance order:
+
+King
+Bob
+Charlie
+Main Data Structures
+HashMap
+HashSet
+ArrayList
+Tree/DFS
+The HashMap represents the parent → children relationship, while DFS produces the inheritance order.
+
