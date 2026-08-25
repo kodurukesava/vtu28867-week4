@@ -1,0 +1,507 @@
+1. Constraint-Driven Solution Design
+Task 1: Determine if String Halves Are Alike
+Approach: Count vowels in the first half and second half. If both counts are equal, return true.
+class Solution {
+
+    public boolean halvesAreAlike(String s) {
+
+        int mid = s.length() / 2;
+        int count1 = 0;
+        int count2 = 0;
+
+        for (int i = 0; i < mid; i++) {
+            if (isVowel(s.charAt(i))) {
+                count1++;
+            }
+        }
+
+        for (int i = mid; i < s.length(); i++) {
+            if (isVowel(s.charAt(i))) {
+                count2++;
+            }
+        }
+
+        return count1 == count2;
+    }
+
+    private boolean isVowel(char c) {
+        return "aeiouAEIOU".indexOf(c) != -1;
+    }
+}
+Example:
+Input:  "book"
+Output: true
+Explanation:
+First half  = "bo" → 1 vowel
+Second half = "ok" → 1 vowel
+Time: O(n)
+Space: O(1)
+________________________________________
+2. Task 2: Lapin – CodeChef
+Approach
+For an even-length string, divide it into two halves and compare their character frequencies.
+For an odd-length string, ignore the middle character.
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int t = sc.nextInt();
+
+        while (t-- > 0) {
+
+            String s = sc.next();
+
+            int n = s.length();
+            int[] left = new int[26];
+            int[] right = new int[26];
+
+            for (int i = 0; i < n / 2; i++) {
+                left[s.charAt(i) - 'a']++;
+            }
+
+            for (int i = (n + 1) / 2; i < n; i++) {
+                right[s.charAt(i) - 'a']++;
+            }
+
+            if (Arrays.equals(left, right)) {
+                System.out.println("YES");
+            } else {
+                System.out.println("NO");
+            }
+        }
+    }
+}
+Example
+Input:
+3
+gaga
+abcde
+rotor
+
+Output:
+YES
+NO
+YES
+Important pattern: Frequency counting.
+________________________________________
+3. Competitive Problem Patterns
+Task 3: Compare the Triplets – HackerRank
+Approach
+Compare corresponding elements of Alice and Bob.
+import java.util.*;
+
+public class Solution {
+
+    public static List<Integer> compareTriplets(
+            List<Integer> a,
+            List<Integer> b) {
+
+        int alice = 0;
+        int bob = 0;
+
+        for (int i = 0; i < 3; i++) {
+
+            if (a.get(i) > b.get(i)) {
+                alice++;
+            } else if (a.get(i) < b.get(i)) {
+                bob++;
+            }
+        }
+
+        return Arrays.asList(alice, bob);
+    }
+}
+Example
+Alice = [5, 6, 7]
+Bob   = [3, 6, 10]
+
+Alice score = 1
+Bob score   = 1
+Output:
+[1, 1]
+Pattern: Direct comparison / counting.
+________________________________________
+4. Task 4: Contains Duplicate – LeetCode
+Approach
+Use a HashSet.
+If an element already exists in the set, a duplicate is present.
+import java.util.*;
+
+class Solution {
+
+    public boolean containsDuplicate(int[] nums) {
+
+        HashSet<Integer> set = new HashSet<>();
+
+        for (int num : nums) {
+
+            if (set.contains(num)) {
+                return true;
+            }
+
+            set.add(num);
+        }
+
+        return false;
+    }
+}
+Example
+Input:
+[1,2,3,1]
+
+Output:
+true
+Efficient approach
+HashSet → O(n) average time
+Time: O(n)
+Space: O(n)
+________________________________________
+5. Writing Efficient Code
+Task 5: Time Conversion – HackerRank
+Convert a 12-hour AM/PM time into 24-hour format.
+import java.util.*;
+
+public class Solution {
+
+    public static String timeConversion(String s) {
+
+        String ampm = s.substring(8, 10);
+
+        int hour = Integer.parseInt(s.substring(0, 2));
+
+        if (ampm.equals("AM")) {
+
+            if (hour == 12) {
+                hour = 0;
+            }
+
+        } else {
+
+            if (hour != 12) {
+                hour += 12;
+            }
+        }
+
+        return String.format("%02d", hour)
+                + s.substring(2, 8);
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        String s = sc.next();
+
+        System.out.println(timeConversion(s));
+    }
+}
+Example
+Input:
+07:05:45PM
+
+Output:
+19:05:45
+Special Cases
+12:00:00AM → 00:00:00
+12:00:00PM → 12:00:00
+Pattern: String manipulation + conditional logic.
+________________________________________
+6. Task 6: Move Zeroes – LeetCode
+Approach
+Move all non-zero values to the beginning and put zeroes at the end.
+class Solution {
+
+    public void moveZeroes(int[] nums) {
+
+        int index = 0;
+
+        for (int num : nums) {
+
+            if (num != 0) {
+                nums[index] = num;
+                index++;
+            }
+        }
+
+        while (index < nums.length) {
+            nums[index] = 0;
+            index++;
+        }
+    }
+}
+Example
+Input:
+[0,1,0,3,12]
+
+Output:
+[1,3,12,0,0]
+Time: O(n)
+Space: O(1)
+Pattern: Two-pointer / in-place processing.
+________________________________________
+7. Matrix Basics
+Task 7: Diagonal Difference – HackerRank
+Approach
+Calculate:
+•	Primary diagonal 
+•	Secondary diagonal 
+Then return their absolute difference.
+import java.util.*;
+
+public class Solution {
+
+    public static int diagonalDifference(
+            List<List<Integer>> arr) {
+
+        int n = arr.size();
+
+        int primary = 0;
+        int secondary = 0;
+
+        for (int i = 0; i < n; i++) {
+
+            primary += arr.get(i).get(i);
+
+            secondary += arr.get(i).get(n - 1 - i);
+        }
+
+        return Math.abs(primary - secondary);
+    }
+}
+Example
+11  2   4
+ 4  5   6
+10  8  -12
+Primary diagonal:
+11 + 5 + (-12) = 4
+Secondary diagonal:
+4 + 5 + 10 = 19
+Difference:
+|4 - 19| = 15
+Output: 15
+________________________________________
+8. Task 8: Transpose Matrix – LeetCode
+Approach
+Rows become columns.
+class Solution {
+
+    public int[][] transpose(int[][] matrix) {
+
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        int[][] result = new int[cols][rows];
+
+        for (int i = 0; i < rows; i++) {
+
+            for (int j = 0; j < cols; j++) {
+
+                result[j][i] = matrix[i][j];
+            }
+        }
+
+        return result;
+    }
+}
+Example
+Input:
+1 2 3
+4 5 6
+Output:
+1 4
+2 5
+3 6
+Pattern: Matrix transformation.
+________________________________________
+9. Strassen's Matrix Multiplication / Matrix Block Sum
+Task 9: Matrix Block Sum – LeetCode
+This problem is efficiently solved using a 2D Prefix Sum, which is an important competitive programming pattern.
+Java Solution
+class Solution {
+
+    public int[][] matrixBlockSum(int[][] mat, int k) {
+
+        int m = mat.length;
+        int n = mat[0].length;
+
+        int[][] prefix = new int[m + 1][n + 1];
+
+        // Build prefix sum
+        for (int i = 1; i <= m; i++) {
+
+            for (int j = 1; j <= n; j++) {
+
+                prefix[i][j] =
+                    mat[i - 1][j - 1]
+                    + prefix[i - 1][j]
+                    + prefix[i][j - 1]
+                    - prefix[i - 1][j - 1];
+            }
+        }
+
+        int[][] result = new int[m][n];
+
+        for (int i = 0; i < m; i++) {
+
+            for (int j = 0; j < n; j++) {
+
+                int r1 = Math.max(0, i - k);
+                int c1 = Math.max(0, j - k);
+
+                int r2 = Math.min(m - 1, i + k);
+                int c2 = Math.min(n - 1, j + k);
+
+                result[i][j] =
+                    prefix[r2 + 1][c2 + 1]
+                    - prefix[r1][c2 + 1]
+                    - prefix[r2 + 1][c1]
+                    + prefix[r1][c1];
+            }
+        }
+
+        return result;
+    }
+}
+Important Concept
+Instead of calculating the sum of every block repeatedly, we first construct:
+2D Prefix Sum
+This makes the solution much more efficient.
+Time: O(m × n)
+Space: O(m × n)
+Note: Matrix Block Sum is not itself Strassen's matrix multiplication. It is a prefix-sum problem. Strassen's algorithm is a separate divide-and-conquer matrix multiplication technique.
+________________________________________
+10. Task 10: Matrix Rotation – HackerRank
+Approach
+For each layer (ring) of the matrix, collect its elements, rotate them, and place them back.
+import java.util.*;
+
+public class Solution {
+
+    public static void rotateMatrix(
+            int[][] matrix, int r) {
+
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        int layers = Math.min(rows, cols) / 2;
+
+        for (int layer = 0; layer < layers; layer++) {
+
+            ArrayList<Integer> elements =
+                    new ArrayList<>();
+
+            // Top
+            for (int j = layer; j < cols - layer; j++) {
+                elements.add(matrix[layer][j]);
+            }
+
+            // Right
+            for (int i = layer + 1;
+                 i < rows - layer; i++) {
+                elements.add(matrix[i][cols - layer - 1]);
+            }
+
+            // Bottom
+            for (int j = cols - layer - 2;
+                 j >= layer; j--) {
+                elements.add(matrix[rows - layer - 1][j]);
+            }
+
+            // Left
+            for (int i = rows - layer - 2;
+                 i > layer; i--) {
+                elements.add(matrix[i][layer]);
+            }
+
+            int size = elements.size();
+            int rotation = r % size;
+
+            int index = rotation;
+
+            // Top
+            for (int j = layer; j < cols - layer; j++) {
+                matrix[layer][j] = elements.get(index % size);
+                index++;
+            }
+
+            // Right
+            for (int i = layer + 1;
+                 i < rows - layer; i++) {
+                matrix[i][cols - layer - 1] =
+                        elements.get(index % size);
+                index++;
+            }
+
+            // Bottom
+            for (int j = cols - layer - 2;
+                 j >= layer; j--) {
+                matrix[rows - layer - 1][j] =
+                        elements.get(index % size);
+                index++;
+            }
+
+            // Left
+            for (int i = rows - layer - 2;
+                 i > layer; i--) {
+                matrix[i][layer] =
+                        elements.get(index % size);
+                index++;
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int rows = sc.nextInt();
+        int cols = sc.nextInt();
+        int r = sc.nextInt();
+
+        int[][] matrix = new int[rows][cols];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                matrix[i][j] = sc.nextInt();
+            }
+        }
+
+        rotateMatrix(matrix, r);
+
+        for (int i = 0; i < rows; i++) {
+
+            for (int j = 0; j < cols; j++) {
+                System.out.print(matrix[i][j] + " ");
+            }
+
+            System.out.println();
+        }
+    }
+}
+Example
+Input:
+4 4 2
+1 2 3 4
+5 6 7 8
+9 10 11 12
+13 14 15 16
+Output:
+3 4 8 12
+2 11 10 16
+1 7 6 15
+5 9 13 14
+Main Concept
+Matrix:
+1  2  3  4
+5  6  7  8
+9 10 11 12
+13 14 15 16
+is treated as separate layers/rings:
+Outer Ring
+Inner Ring
+Each ring is rotated independently.
+________________________________________
