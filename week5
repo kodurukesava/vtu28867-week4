@@ -1,0 +1,524 @@
+Session 1 – Maximum Subarray: Brute Force → Optimized
+Task 1: Maximum Subarray – LeetCode
+Approach 1: Brute Force
+Check every possible subarray and calculate its sum.
+class Solution {
+    public int maxSubArray(int[] nums) {
+
+        int maxSum = nums[0];
+
+        for (int i = 0; i < nums.length; i++) {
+
+            int sum = 0;
+
+            for (int j = i; j < nums.length; j++) {
+
+                sum += nums[j];
+
+                maxSum = Math.max(maxSum, sum);
+            }
+        }
+
+        return maxSum;
+    }
+}
+Example
+Input:
+[-2,1,-3,4,-1,2,1,-5,4]
+
+Output:
+6
+Maximum subarray:
+[4,-1,2,1]
+
+Sum = 6
+Time Complexity: O(n²)
+Space Complexity: O(1)
+________________________________________
+Optimized Solution – Kadane's Algorithm
+class Solution {
+    public int maxSubArray(int[] nums) {
+
+        int currentSum = nums[0];
+        int maxSum = nums[0];
+
+        for (int i = 1; i < nums.length; i++) {
+
+            currentSum = Math.max(
+                nums[i],
+                currentSum + nums[i]
+            );
+
+            maxSum = Math.max(maxSum, currentSum);
+        }
+
+        return maxSum;
+    }
+}
+Time: O(n)
+Space: O(1)
+Brute Force vs Optimized
+Method	Time	Space
+Brute Force	O(n²)	O(1)
+Kadane	O(n)	O(1)
+________________________________________
+Task 2: The Birthday Bar – HackerRank
+Problem
+Find the number of contiguous segments having:
+•	Length = m 
+•	Sum = d 
+import java.util.*;
+
+public class Solution {
+
+    public static int birthday(
+            List<Integer> s, int d, int m) {
+
+        int count = 0;
+
+        for (int i = 0; i <= s.size() - m; i++) {
+
+            int sum = 0;
+
+            for (int j = i; j < i + m; j++) {
+                sum += s.get(j);
+            }
+
+            if (sum == d) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+}
+Example
+Input:
+s = [1,2,1,3,2]
+d = 3
+m = 2
+
+Output:
+2
+Segments:
+[1,2] = 3
+[2,1] = 3
+Pattern: Sliding Window.
+________________________________________
+Session 2 – Kadane's Algorithm
+Task 3: Max Subarray – HackerRank
+HackerRank's Max Subarray asks for two values:
+1.	Maximum contiguous subarray sum 
+2.	Maximum non-contiguous subsequence sum 
+import java.util.*;
+
+public class Solution {
+
+    public static List<Integer> maxSubarray(
+            List<Integer> arr) {
+
+        int current = arr.get(0);
+        int maxSub = arr.get(0);
+
+        int maxElement = arr.get(0);
+        int maxNonContiguous = 0;
+
+        boolean hasPositive = arr.get(0) > 0;
+
+        for (int i = 1; i < arr.size(); i++) {
+
+            int value = arr.get(i);
+
+            current = Math.max(
+                value,
+                current + value
+            );
+
+            maxSub = Math.max(maxSub, current);
+
+            maxElement = Math.max(maxElement, value);
+
+            if (value > 0) {
+                maxNonContiguous += value;
+                hasPositive = true;
+            }
+        }
+
+        if (!hasPositive) {
+            maxNonContiguous = maxElement;
+        }
+
+        return Arrays.asList(maxSub, maxNonContiguous);
+    }
+}
+Example
+Input:
+[2,-1,2,3,4,-5]
+
+Maximum contiguous:
+10
+
+Maximum non-contiguous:
+11
+Output:
+[10, 11]
+________________________________________
+Task 4: Maximum Sum Circular Subarray – LeetCode
+Key Idea
+There are two possibilities:
+Case 1
+Normal maximum subarray.
+Case 2
+Circular maximum:
+Total Sum - Minimum Subarray
+class Solution {
+
+    public int maxSubarraySumCircular(int[] nums) {
+
+        int total = 0;
+
+        int currentMax = nums[0];
+        int maxSum = nums[0];
+
+        int currentMin = nums[0];
+        int minSum = nums[0];
+
+        for (int i = 0; i < nums.length; i++) {
+
+            total += nums[i];
+
+            if (i > 0) {
+
+                currentMax = Math.max(
+                    nums[i],
+                    currentMax + nums[i]
+                );
+
+                maxSum = Math.max(maxSum, currentMax);
+
+                currentMin = Math.min(
+                    nums[i],
+                    currentMin + nums[i]
+                );
+
+                minSum = Math.min(minSum, currentMin);
+            }
+        }
+
+        // All elements are negative
+        if (maxSum < 0) {
+            return maxSum;
+        }
+
+        return Math.max(
+            maxSum,
+            total - minSum
+        );
+    }
+}
+Time: O(n)
+Space: O(1)
+________________________________________
+Session 3 – String Handling Basics
+Task 5: String to Integer (atoi) – LeetCode
+Java Solution
+class Solution {
+
+    public int myAtoi(String s) {
+
+        int i = 0;
+        int n = s.length();
+
+        // Remove leading spaces
+        while (i < n && s.charAt(i) == ' ') {
+            i++;
+        }
+
+        // Sign
+        int sign = 1;
+
+        if (i < n && (s.charAt(i) == '+' ||
+                      s.charAt(i) == '-')) {
+
+            if (s.charAt(i) == '-') {
+                sign = -1;
+            }
+
+            i++;
+        }
+
+        int result = 0;
+
+        while (i < n &&
+               Character.isDigit(s.charAt(i))) {
+
+            int digit = s.charAt(i) - '0';
+
+            // Check overflow
+            if (result > (Integer.MAX_VALUE - digit) / 10) {
+
+                return sign == 1
+                    ? Integer.MAX_VALUE
+                    : Integer.MIN_VALUE;
+            }
+
+            result = result * 10 + digit;
+
+            i++;
+        }
+
+        return result * sign;
+    }
+}
+Example
+Input:
+"   -42"
+
+Output:
+-42
+Processing
+"   -42"
+   ↓
+remove spaces
+   ↓
+"-42"
+   ↓
+sign = -
+   ↓
+42
+   ↓
+-42
+________________________________________
+Task 6: Alternating Characters – HackerRank
+Problem
+Find the minimum number of deletions required so that no two adjacent characters are the same.
+import java.util.*;
+
+public class Solution {
+
+    public static int alternatingCharacters(String s) {
+
+        int deletions = 0;
+
+        for (int i = 1; i < s.length(); i++) {
+
+            if (s.charAt(i) == s.charAt(i - 1)) {
+                deletions++;
+            }
+        }
+
+        return deletions;
+    }
+}
+Example
+Input:
+AABAAB
+
+Output:
+2
+Remove:
+AA → one deletion
+AA → one deletion
+Total = 2
+Time: O(n)
+Space: O(1)
+________________________________________
+Session 4 – Advanced String Techniques
+Task 7: Longest Substring Without Repeating Characters
+Approach: Sliding Window
+import java.util.*;
+
+class Solution {
+
+    public int lengthOfLongestSubstring(String s) {
+
+        HashSet<Character> set = new HashSet<>();
+
+        int left = 0;
+        int maxLength = 0;
+
+        for (int right = 0; right < s.length(); right++) {
+
+            while (set.contains(s.charAt(right))) {
+                set.remove(s.charAt(left));
+                left++;
+            }
+
+            set.add(s.charAt(right));
+
+            maxLength = Math.max(
+                maxLength,
+                right - left + 1
+            );
+        }
+
+        return maxLength;
+    }
+}
+Example
+Input:
+"abcabcbb"
+
+Output:
+3
+Longest substring:
+"abc"
+Time: O(n)
+Space: O(n)
+________________________________________
+Task 8: Find and Replace Pattern – LeetCode
+Example
+Pattern:
+abb
+Words:
+mee
+aqq
+dkd
+ccc
+Matching words:
+mee
+aqq
+Java Solution
+import java.util.*;
+
+class Solution {
+
+    public List<String> findAndReplacePattern(
+            String[] words, String pattern) {
+
+        List<String> result = new ArrayList<>();
+
+        for (String word : words) {
+
+            if (matches(word, pattern)) {
+                result.add(word);
+            }
+        }
+
+        return result;
+    }
+
+    private boolean matches(
+            String word, String pattern) {
+
+        Map<Character, Character> map1 =
+                new HashMap<>();
+
+        Map<Character, Character> map2 =
+                new HashMap<>();
+
+        for (int i = 0; i < word.length(); i++) {
+
+            char w = word.charAt(i);
+            char p = pattern.charAt(i);
+
+            if (map1.containsKey(w) &&
+                map1.get(w) != p) {
+                return false;
+            }
+
+            if (map2.containsKey(p) &&
+                map2.get(p) != w) {
+                return false;
+            }
+
+            map1.put(w, p);
+            map2.put(p, w);
+        }
+
+        return true;
+    }
+}
+Important Concept
+We maintain a two-way mapping:
+word character → pattern character
+pattern character → word character
+This ensures a one-to-one pattern.
+________________________________________
+Session 5 – Naive Pattern Matching
+Task 9: String Matching in an Array – LeetCode
+Approach
+Check whether each word is a substring of another word.
+import java.util.*;
+
+class Solution {
+
+    public List<String> stringMatching(String[] words) {
+
+        List<String> result = new ArrayList<>();
+
+        for (int i = 0; i < words.length; i++) {
+
+            for (int j = 0; j < words.length; j++) {
+
+                if (i != j &&
+                    words[j].contains(words[i])) {
+
+                    result.add(words[i]);
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+}
+Example
+Input:
+["mass","as","hero","superhero"]
+
+Output:
+["as","hero"]
+Because:
+"as" is inside "mass"
+"hero" is inside "superhero"
+________________________________________
+Task 10: Naive Pattern Searching – GeeksforGeeks
+Problem
+Find all positions where a pattern occurs in a text.
+Java Solution
+public class NaivePatternSearch {
+
+    static void search(String text, String pattern) {
+
+        int n = text.length();
+        int m = pattern.length();
+
+        for (int i = 0; i <= n - m; i++) {
+
+            int j;
+
+            for (j = 0; j < m; j++) {
+
+                if (text.charAt(i + j)
+                        != pattern.charAt(j)) {
+
+                    break;
+                }
+            }
+
+            if (j == m) {
+                System.out.println(
+                    "Pattern found at index " + i
+                );
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        String text = "AABAACAADAABAABA";
+        String pattern = "AABA";
+
+        search(text, pattern);
+    }
+}
+Output
+Pattern found at index 0
+Pattern found at index 9
+Pattern found at index 12
+How Naive Pattern Matching Works
+For:
+Text    = AABAACAADAABAABA
+Pattern = AABA
+
