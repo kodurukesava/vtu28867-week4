@@ -1,0 +1,593 @@
+1. KMP Algorithm
+Task 1: String Similarity – HackerRank
+This problem asks for the sum of the lengths of the longest common prefix between the string and every suffix.
+A simple and efficient solution uses the Z-algorithm, which is closely related to prefix-based string matching.
+Java Solution
+import java.util.*;
+
+public class Solution {
+
+    public static long stringSimilarity(String s) {
+
+        int n = s.length();
+        int[] z = new int[n];
+
+        int left = 0;
+        int right = 0;
+
+        for (int i = 1; i < n; i++) {
+
+            if (i <= right) {
+                z[i] = Math.min(right - i + 1,
+                                z[i - left]);
+            }
+
+            while (i + z[i] < n &&
+                   s.charAt(z[i]) == s.charAt(i + z[i])) {
+                z[i]++;
+            }
+
+            if (i + z[i] - 1 > right) {
+                left = i;
+                right = i + z[i] - 1;
+            }
+        }
+
+        long result = n;
+
+        for (int value : z) {
+            result += value;
+        }
+
+        return result;
+    }
+}
+Example
+Input:
+ababaa
+
+Output:
+11
+Main idea
+For every suffix, calculate how many characters match the prefix.
+String: ababaa
+
+Suffixes:
+ababaa → 6
+babaa  → 0
+abaa   → 3
+baa    → 0
+aa     → 1
+a      → 1
+
+Total = 11
+Time: O(n)
+Space: O(n)
+Teaching note: Although this task is placed under KMP in the syllabus, the standard efficient solution is the Z-algorithm, not KMP. Both are linear-time prefix-based pattern techniques.
+________________________________________
+2. Task 2: Repeated Substring Pattern – LeetCode
+This problem can be solved elegantly using the KMP LPS (Longest Prefix Suffix) array.
+Java Solution
+class Solution {
+
+    public boolean repeatedSubstringPattern(String s) {
+
+        int n = s.length();
+
+        int[] lps = new int[n];
+
+        int len = 0;
+        int i = 1;
+
+        while (i < n) {
+
+            if (s.charAt(i) == s.charAt(len)) {
+
+                lps[i] = ++len;
+                i++;
+
+            } else if (len > 0) {
+
+                len = lps[len - 1];
+
+            } else {
+
+                lps[i] = 0;
+                i++;
+            }
+        }
+
+        int longestPrefixSuffix = lps[n - 1];
+
+        return longestPrefixSuffix > 0 &&
+               n % (n - longestPrefixSuffix) == 0;
+    }
+}
+Example
+Input:
+"abab"
+
+Output:
+true
+Because:
+"ab" + "ab" = "abab"
+KMP Concept
+For:
+abab
+LPS:
+0 0 1 2
+The longest prefix-suffix length is 2.
+n - LPS = 4 - 2 = 2
+Since:
+4 % 2 = 0
+the string consists of repeated substrings.
+Time: O(n)
+Space: O(n)
+________________________________________
+3. KMP Applications
+Task 3: Two Strings – HackerRank
+The problem asks whether two strings share at least one common character.
+A HashSet provides a simple efficient solution.
+Java Solution
+import java.util.*;
+
+public class Solution {
+
+    public static String twoStrings(String s1, String s2) {
+
+        HashSet<Character> set = new HashSet<>();
+
+        for (char c : s1.toCharArray()) {
+            set.add(c);
+        }
+
+        for (char c : s2.toCharArray()) {
+
+            if (set.contains(c)) {
+                return "YES";
+            }
+        }
+
+        return "NO";
+    }
+}
+Example
+s1 = "hello"
+s2 = "world"
+
+Output:
+YES
+Because both contain:
+o
+l
+Time: O(n + m)
+Space: O(Alphabet Size)
+Teaching note: This task is listed under KMP Applications, but KMP is not necessary here because the problem only asks whether the strings share a character.
+________________________________________
+4. Task 4: Rotate String – LeetCode
+A string goal is a rotation of s if it occurs inside:
+s + s
+Java Solution
+class Solution {
+
+    public boolean rotateString(String s, String goal) {
+
+        if (s.length() != goal.length()) {
+            return false;
+        }
+
+        return (s + s).contains(goal);
+    }
+}
+Example
+Input:
+s = "abcde"
+goal = "cdeab"
+
+Output:
+true
+Because:
+s + s = "abcdeabcde"
+and:
+"cdeab"
+is present.
+Time: O(n²) worst case depending on substring implementation.
+________________________________________
+5. Boyer-Moore Algorithm
+Task 5: Mars Exploration – HackerRank
+The expected repeated message is:
+SOS
+Count how many characters are different from the expected pattern.
+Java Solution
+import java.util.*;
+
+public class Solution {
+
+    public static int marsExploration(String s) {
+
+        String pattern = "SOS";
+
+        int changes = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+
+            if (s.charAt(i) !=
+                pattern.charAt(i % 3)) {
+
+                changes++;
+            }
+        }
+
+        return changes;
+    }
+}
+Example
+Input:
+SOSSPSSQSSOR
+
+Output:
+3
+Expected:
+S O S S O S S O S S O S
+Compare each character and count differences.
+Time: O(n)
+Space: O(1)
+Teaching note: This HackerRank problem is not actually a Boyer-Moore string-search problem. It is a character-comparison problem. It can be used as a simple application exercise before teaching actual Boyer-Moore searching.
+________________________________________
+6. Task 6: Find All Anagrams in a String – LeetCode
+Use a sliding window + frequency array.
+Java Solution
+import java.util.*;
+
+class Solution {
+
+    public List<Integer> findAnagrams(
+            String s, String p) {
+
+        List<Integer> result = new ArrayList<>();
+
+        if (p.length() > s.length()) {
+            return result;
+        }
+
+        int[] pCount = new int[26];
+        int[] window = new int[26];
+
+        for (char c : p.toCharArray()) {
+            pCount[c - 'a']++;
+        }
+
+        int k = p.length();
+
+        for (int i = 0; i < s.length(); i++) {
+
+            window[s.charAt(i) - 'a']++;
+
+            if (i >= k) {
+                window[s.charAt(i - k) - 'a']--;
+            }
+
+            if (i >= k - 1 &&
+                Arrays.equals(pCount, window)) {
+
+                result.add(i - k + 1);
+            }
+        }
+
+        return result;
+    }
+}
+Example
+Input:
+s = "cbaebabacd"
+p = "abc"
+
+Output:
+[0, 6]
+Anagrams occur at:
+"cba" → index 0
+"bac" → index 6
+Time: O(26n) ≈ O(n)
+Space: O(26)
+________________________________________
+7. Palindrome Techniques
+Task 7: Palindrome Index – HackerRank
+Find the index of the character that can be removed to make the string a palindrome.
+Java Solution
+public class Solution {
+
+    public static int palindromeIndex(String s) {
+
+        int left = 0;
+        int right = s.length() - 1;
+
+        while (left < right) {
+
+            if (s.charAt(left) != s.charAt(right)) {
+
+                if (isPalindrome(s, left + 1, right)) {
+                    return left;
+                }
+
+                if (isPalindrome(s, left, right - 1)) {
+                    return right;
+                }
+
+                return -1;
+            }
+
+            left++;
+            right--;
+        }
+
+        return -1;
+    }
+
+    private static boolean isPalindrome(
+            String s, int left, int right) {
+
+        while (left < right) {
+
+            if (s.charAt(left) != s.charAt(right)) {
+                return false;
+            }
+
+            left++;
+            right--;
+        }
+
+        return true;
+    }
+}
+Example
+Input:
+aaab
+
+Output:
+3
+Remove:
+b
+The remaining string:
+aaa
+is a palindrome.
+Time: O(n)
+Space: O(1)
+________________________________________
+8. Task 8: Find the Index of the First Occurrence in a String
+This is a natural problem for demonstrating KMP string searching.
+Java Solution – KMP
+class Solution {
+
+    public int strStr(String haystack, String needle) {
+
+        if (needle.length() == 0) {
+            return 0;
+        }
+
+        int[] lps = buildLPS(needle);
+
+        int i = 0;
+        int j = 0;
+
+        while (i < haystack.length()) {
+
+            if (haystack.charAt(i) ==
+                needle.charAt(j)) {
+
+                i++;
+                j++;
+
+                if (j == needle.length()) {
+                    return i - j;
+                }
+
+            } else if (j > 0) {
+
+                j = lps[j - 1];
+
+            } else {
+
+                i++;
+            }
+        }
+
+        return -1;
+    }
+
+    private int[] buildLPS(String pattern) {
+
+        int[] lps = new int[pattern.length()];
+
+        int len = 0;
+        int i = 1;
+
+        while (i < pattern.length()) {
+
+            if (pattern.charAt(i) ==
+                pattern.charAt(len)) {
+
+                lps[i] = ++len;
+                i++;
+
+            } else if (len > 0) {
+
+                len = lps[len - 1];
+
+            } else {
+
+                lps[i] = 0;
+                i++;
+            }
+        }
+
+        return lps;
+    }
+}
+Example
+haystack = "sadbutsad"
+needle   = "sad"
+
+Output:
+0
+KMP Steps
+Pattern
+   ↓
+Build LPS
+   ↓
+Compare text and pattern
+   ↓
+Mismatch
+   ↓
+Use LPS instead of starting again
+Time: O(n + m)
+Space: O(m)
+________________________________________
+9. Manacher Algorithm
+Task 9: Longest Palindromic Substring – LeetCode
+Manacher's algorithm finds the longest palindromic substring in O(n) time.
+Java Solution
+class Solution {
+
+    public String longestPalindrome(String s) {
+
+        if (s == null || s.length() < 2) {
+            return s;
+        }
+
+        // Transform string
+        StringBuilder t = new StringBuilder("^");
+
+        for (char c : s.toCharArray()) {
+            t.append("#").append(c);
+        }
+
+        t.append("#$");
+
+        int n = t.length();
+
+        int[] p = new int[n];
+
+        int center = 0;
+        int right = 0;
+
+        int maxLen = 0;
+        int maxCenter = 0;
+
+        for (int i = 1; i < n - 1; i++) {
+
+            int mirror = 2 * center - i;
+
+            if (i < right) {
+                p[i] = Math.min(
+                    right - i,
+                    p[mirror]
+                );
+            }
+
+            while (t.charAt(i + 1 + p[i]) ==
+                   t.charAt(i - 1 - p[i])) {
+
+                p[i]++;
+            }
+
+            if (i + p[i] > right) {
+
+                center = i;
+                right = i + p[i];
+            }
+
+            if (p[i] > maxLen) {
+
+                maxLen = p[i];
+                maxCenter = i;
+            }
+        }
+
+        int start =
+            (maxCenter - maxLen) / 2;
+
+        return s.substring(
+            start,
+            start + maxLen
+        );
+    }
+}
+Example
+Input:
+"babad"
+
+Output:
+"bab"
+"aba" is also a valid answer.
+Manacher's Main Idea
+Transform:
+babad
+into:
+#b#a#b#a#d#
+This makes odd and even length palindromes easier to process uniformly.
+The array p[] stores the palindrome radius around each position.
+Time: O(n)
+Space: O(n)
+________________________________________
+10. Circular Palindromes – HackerRank
+This problem asks for the longest palindromic substring for every rotation of the string.
+A straightforward educational solution is to generate each rotation and find its longest palindrome using expand-around-center.
+import java.util.*;
+
+public class Solution {
+
+    public static List<Integer> circularPalindromes(
+            String s) {
+
+        int n = s.length();
+
+        List<Integer> result = new ArrayList<>();
+
+        for (int start = 0; start < n; start++) {
+
+            String rotated =
+                s.substring(start) +
+                s.substring(0, start);
+
+            result.add(longestPalindrome(rotated));
+        }
+
+        return result;
+    }
+
+    private static int longestPalindrome(String s) {
+
+        int max = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+
+            max = Math.max(
+                max,
+                expand(s, i, i)
+            );
+
+            max = Math.max(
+                max,
+                expand(s, i, i + 1)
+            );
+        }
+
+        return max;
+    }
+
+    private static int expand(
+            String s, int left, int right) {
+
+        while (left >= 0 &&
+               right < s.length() &&
+               s.charAt(left) ==
+               s.charAt(right)) {
+
+            left--;
+            right++;
+        }
+
+        return right - left - 1;
+    }
+}
+
