@@ -1,0 +1,1927 @@
+UNIT IV – Advanced Data Handling using Collections
+Topics: Advanced problem solving using linear and non-linear collections – Dynamic arrays, linked structures, sets, maps, and associative collections
+Question 1: Advanced Problem-Solving Approach using linear and non-linear collections.
+An online shopping system must maintain products, quickly search products by ID, and process orders according to priority.
+import java.util.*;
+class Order 
+{
+ int id;
+ int priority; 
+Order(int id, int priority) 
+{ 
+this.id = id;
+ this.priority = priority;
+ }
+ }
+public class ShoppingSystem 
+{ 
+public static void main(String[] args) 
+{
+Map<Integer, String> products = new HashMap<>(); 
+products.put(101, "Laptop"); 
+products.put(102, "Mobile");
+ products.put(103, "Headphones");
+List<String> history = new ArrayList<>(); 
+// Priority-based collection 
+PriorityQueue<Order> orders = new PriorityQueue<>( (a, b) -> Integer.compare(b.priority, a.priority) ); 
+orders.add(new Order(1, 2)); 
+orders.add(new Order(2, 5)); 
+orders.add(new Order(3, 1)); 
+history.add("Order 1"); 
+history.add("Order 2");
+System.out.println("Product: " + products.get(102));
+ System.out.println("Processing orders:"); 
+while (!orders.isEmpty()) 
+{ 
+Order order = orders.poll(); 
+System.out.println( "Order " + order.id + " Priority: " + order.priority ); 
+}
+} 
+System.out.println("Order History: " + history); 
+} 
+}
+
+
+
+
+Question: 2 - Student Marks Management System
+
+A teacher wants to create a Java program to store the marks of students in a class. The number of students is not known in advance, so the program should use a dynamic array. The teacher can add marks one by one, and the array should automatically increase its size when it becomes full.
+
+import java.util.ArrayList; 
+import java.util.Scanner;
+ public class StudentMarks 
+{ 
+public static void main(String[] args)
+ { 
+Scanner sc = new Scanner(System.in);
+ArrayList<Integer> marks = new ArrayList<>(); 
+System.out.print("Enter number of students: "); 
+int n = sc.nextInt(); 
+// Add marks dynamically 
+for (int i = 0; i < n; i++) 
+{ 
+System.out.print("Enter marks of student " + (i + 1) + ": "); 
+int mark = sc.nextInt();
+ marks.add(mark); 
+}
+// Display marks 
+System.out.println("\nStudent Marks:");
+ for (int mark : marks)
+ { 
+System.out.println(mark); }
+ // Calculate total
+ int total = 0; 
+int highest = marks.get(0);
+for (int mark : marks)
+ {
+ total += mark;
+ if (mark > highest) 
+{ 
+highest = mark; 
+}
+ }
+double average = (double) total / marks.size();
+ System.out.println("\nTotal Marks = " + total); 
+System.out.println("Average Marks = " + average); 
+System.out.println("Highest Mark = " + highest);
+ sc.close();
+ } 
+}
+
+Sample Output:
+Enter number of students: 5
+ Enter marks of student 1: 78
+ Enter marks of student 2: 85 
+Enter marks of student 3: 92 
+Enter marks of student 4: 67 
+Enter marks of student 5: 88 
+
+Student Marks: 
+78 
+85 
+92 
+67 
+88 
+
+Total Marks = 410
+ Average Marks = 82.0 
+Highest Mark = 92
+
+
+Question: 3 - Browser History — Linear Collection
+
+A web browser stores recently visited pages. When the user presses the Back button, the most recently visited page should be removed first.
+
+import java.util.*; 
+public class BrowserHistory
+ { 
+public static void main(String[] args) 
+{ 
+Stack<String> history = new Stack<>(); 
+history.push("Google"); 
+history.push("YouTube"); 
+history.push("Wikipedia"); 
+history.push("GitHub"); 
+System.out.println("Browser History: " + history); 
+String backPage = history.pop(); 
+System.out.println("Going Back From: " + backPage); 
+System.out.println("Current History: " + history);
+ } 
+}
+
+Sample Output
+Browser History: [Google, YouTube, Wikipedia, GitHub]
+Going Back From: GitHub
+Current History: [Google, YouTube, Wikipedia]
+
+
+Question: 4 - Student Marks Management — Linear Collection
+
+A teacher does not know the number of students in advance. Student marks need to be stored dynamically.
+Question
+
+Write a Java program using an ArrayList to:
+•	Store marks. 
+•	Display marks. 
+•	Find the highest mark. 
+•	Calculate the average.
+
+import java.util.*;
+ public class StudentMarks 
+{ 
+public static void main(String[] args) 
+{ 
+ArrayList<Integer> marks = new ArrayList<>(); 
+marks.add(78); 
+marks.add(85);
+ marks.add(92); 
+marks.add(67);
+ marks.add(88); 
+System.out.println("Student Marks: " + marks); 
+int highest = Collections.max(marks); 
+int total = 0; 
+for (int mark : marks) 
+{
+ total += mark;
+ } 
+double average = (double) total / marks.size(); 
+System.out.println("Highest Mark: " + highest);
+ System.out.println("Average Mark: " + average); 
+} 
+}
+
+Sample Output
+Student Marks: [78, 85, 92, 67, 88]
+Highest Mark: 92
+Average Mark: 82.0
+
+Question: 5 - Music Playlist — Singly Linked List
+Scenario
+A music application maintains songs in a playlist. Users can add songs to the playlist and remove a song when they no longer want it.
+Question
+Implement a linked list playlist that supports:
+1.	Adding songs. 
+2.	Removing a song. 
+3.	Displaying the playlist.
+
+class SongNode 
+{
+ String song; 
+SongNode next; 
+SongNode(String song) 
+{ 
+this.song = song;
+ }
+ }
+public class MusicPlaylist 
+{ 
+SongNode head;
+ void addSong(String song)
+ { 
+SongNode newNode = new SongNode(song);
+ if (head == null) 
+{ 
+head = newNode; 
+return; 
+}
+SongNode temp = head;
+ while (temp.next != null) 
+{
+ temp = temp.next; 
+} 
+temp.next = newNode;
+ }
+void removeSong(String song) 
+{ 
+if (head == null) 
+return;
+ if (head.song.equals(song))
+ { 
+head = head.next; 
+return;
+ }
+SongNode temp = head;
+ while (temp.next != null)
+ { 
+if (temp.next.song.equals(song))
+ {
+ temp.next = temp.next.next;
+ return; 
+} 
+temp = temp.next;
+ } 
+}
+void display() 
+{ 
+SongNode temp = head;
+ while (temp != null)
+ {
+ System.out.print(temp.song + " -> ");
+ temp = temp.next; 
+} 
+System.out.println("NULL"); 
+}
+public static void main(String[] args) 
+{
+ MusicPlaylist playlist = new MusicPlaylist();
+ playlist.addSong("Song A"); 
+playlist.addSong("Song B");
+ playlist.addSong("Song C");
+ playlist.addSong("Song D"); 
+System.out.println("Original Playlist:"); 
+playlist.display(); playlist.removeSong("Song B"); 
+System.out.println("After Removing Song B:");
+ playlist.display(); 
+} 
+}
+Sample Output
+Original Playlist:
+Song A -> Song B -> Song C -> Song D -> NULL
+
+After Removing Song B:
+Song A -> Song C -> Song D -> NULL
+
+Question 6: Find All Unique Items Purchased
+
+Scenario: 
+A customer purchases several items, including repeated items. Write a Java program using a LinkedHashSet to display only unique items in the order they were purchased.
+
+import java.util.LinkedHashSet;
+
+public class ShoppingCart {
+    public static void main(String[] args) {
+        LinkedHashSet<String> cart = new LinkedHashSet<>();
+
+        cart.add("Book");
+        cart.add("Pen");
+        cart.add("Notebook");
+        cart.add("Pen");
+        cart.add("Book");
+        cart.add("Pencil");
+
+        System.out.println("Unique items purchased: " + cart);
+    }
+}
+Sample Output
+Unique items purchased: [Book, Pen, Notebook, Pencil]
+
+Question: 7 Display Numbers in Sorted Order
+
+Scenario:
+
+ A teacher enters students' marks, but some marks are repeated. Write a Java program using a TreeSet to display the unique marks in ascending order.
+Source Code
+import java.util.TreeSet;
+
+public class SortedMarks {
+    public static void main(String[] args) {
+        TreeSet<Integer> marks = new TreeSet<>();
+
+        marks.add(85);
+        marks.add(72);
+        marks.add(95);
+        marks.add(85);
+        marks.add(60);
+        marks.add(72);
+
+        System.out.println("Unique marks in ascending order: " + marks);
+    }
+}
+Sample Output
+Unique marks in ascending order: [60, 72, 85, 95]
+
+Question: 8 Find Common Subjects Between Two Students
+
+Scenario: 
+
+Two students have selected different subjects. Write a Java program using retainAll() to find the subjects common to both.
+
+Source Code
+import java.util.HashSet;
+
+public class CommonSubjects {
+    public static void main(String[] args) {
+        HashSet<String> student1 = new HashSet<>();
+        HashSet<String> student2 = new HashSet<>();
+
+        student1.add("Maths");
+        student1.add("Physics");
+        student1.add("Chemistry");
+        student1.add("Biology");
+
+        student2.add("Chemistry");
+        student2.add("Biology");
+        student2.add("Computer Science");
+
+        student1.retainAll(student2);
+
+        System.out.println("Common subjects: " + student1);
+    }
+}
+Sample Output
+Common subjects: [Biology, Chemistry]
+
+
+
+
+
+
+
+
+Associative collections 
+
+Associative collections store data in the form of key-value pairs, where each key is associated with a value. In Java, the main associative collection classes are HashMap, LinkedHashMap, and TreeMap.
+
+Question: 9 - Student Marks Using HashMap
+
+Scenario: 
+
+A teacher wants to store the marks of students using their roll numbers as keys. Write a Java program to display the marks of a particular student.
+
+Source Code
+
+import java.util.HashMap;
+
+public class StudentMarks {
+    public static void main(String[] args) {
+        HashMap<Integer, Integer> marks = new HashMap<>();
+
+        marks.put(101, 85);
+        marks.put(102, 92);
+        marks.put(103, 78);
+        marks.put(104, 95);
+
+        int rollNo = 102;
+
+        System.out.println("Student marks: " + marks.get(rollNo));
+    }
+}
+Sample Output
+Student marks: 92
+
+Question 10 - Phone Contact Directory
+Scenario
+A mobile application stores people's names and phone numbers. Users can search for a contact or update an existing phone number.
+
+import java.util.*; 
+public class ContactDirectory 
+{ 
+public static void main(String[] args) 
+{ 
+Scanner sc = new Scanner(System.in);
+ HashMap<String, String> contacts = new HashMap<>(); 
+System.out.print("Enter number of contacts: "); 
+int n = sc.nextInt(); 
+for (int i = 0; i < n; i++)
+ { 
+String name = sc.next();
+ String phone = sc.next();
+ contacts.put(name, phone);
+ }
+System.out.print("Enter contact name to search: "); 
+String name = sc.next(); 
+if (contacts.containsKey(name))
+ { 
+System.out.println(name + "'s phone number: " + contacts.get(name)); 
+System.out.print("Enter new phone number: ");
+ String newPhone = sc.next();
+ contacts.put(name, newPhone);
+ System.out.println("Updated phone number: " + contacts.get(name));
+ } 
+Else
+ { 
+System.out.println("Contact not found."); 
+} 
+sc.close();
+ }
+ }
+
+Sample Input
+2
+Arun 9876543210
+Priya 9123456780
+Priya
+9000000000
+Sample Output
+Priya's phone number: 9123456780
+Updated phone number: 9000000000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Topic : Frequency counting and indexing techniques – Nested collections and hierarchical data representation
+
+QUESTION 1 – MOST FREQUENT ELEMENT WITH FIRST INDEX 
+Inspired by HackerRank (169. Majority Element)
+Problem
+Given an array nums of size n, return the majority element.
+The majority element is the element that appears more than ⌊n / 2⌋ times. You may assume that the majority element always exists in the array.
+Example 1:
+•	Input: nums = [3,2,3]
+•	Output: 3
+Example 2:
+•	Input: nums = [2,2,1,1,1,2,2]
+•	Output: 2
+Constraints:
+•	n == nums.length
+•	1 <= n <= 5 * 104
+•	-109 <= nums[i] <= 109
+•	The input is generated such that a majority element will exist in the array. 
+Program
+public class MajorityElement 
+{
+    	public static int majorityElement(int[] nums) 
+{
+        	int candidate = 0;
+        	int count = 0;
+        	for (int num : nums) 
+{
+            	if (count == 0) 
+{
+                		candidate = num;
+            	}
+            	if (num == candidate) 
+{
+                		count++;
+            	} 
+else 
+{
+                		count--;
+            	}
+        }
+        		return candidate;
+}
+public static void main(String[] args) 
+{
+        		int[] nums = {2, 2, 1, 1, 1, 2, 2};
+       	 	int result = majorityElement(nums);
+        		System.out.println("Majority Element: " + result);
+    	}
+}
+Sample output
+Majority Element: 2
+
+QUESTION 2 – FIRST UNIQUE CHARACTER IN A STRING
+Inspired by Leetcode – 387
+Problem
+Given a string s, find the first non-repeating character in it and return its index. If it does not exist, return -1.
+Example 1:
+Input: s = "leetcode"
+Output: 0
+Explanation:
+The character 'l' at index 0 is the first character that does not occur at any other index.
+Example 2:
+Input: s = "loveleetcode"
+Output: 2
+Example 3:
+Input: s = "aabb"
+Output: -1
+ Constraints:
+•	1 <= s.length <= 105
+•	s consists of only lowercase English letters.
+Program
+public class Main 
+{
+public static int firstUniqChar(String s) 
+{
+        		// Array to store character frequency
+        		int[] count = new int[26];
+       		// Count each character
+        		for (int i = 0; i < s.length(); i++) {
+            	count[s.charAt(i) - 'a']++;
+        }
+        // Find the first character with frequency 1
+        for (int i = 0; i < s.length(); i++) 
+{
+            	if (count[s.charAt(i) - 'a'] == 1) 
+{
+                		return i;
+            	}
+        }
+        // No non-repeating character found
+        return -1;
+    }
+
+    public static void main(String[] args) 
+   {
+
+        String s = "loveleetcode";
+        int result = firstUniqChar(s);
+        System.out.println(result);
+    }
+}
+Sample Input
+6
+aba
+baba
+aba
+xzxb
+aba
+baba
+4
+aba
+baba
+xzxb
+abc
+Sample Output
+3
+2
+1
+0
+
+QUESTION 3 – DEGREE OF ARRAY
+Inspired by HackerRank
+Problem
+Given a non-empty array of non-negative integers nums, the degree of this array is defined as the maximum frequency of any one of its elements.
+Your task is to find the smallest possible length of a (contiguous) subarray of nums, that has the same degree as nums.
+
+Solution – Java
+public class Main {
+    public static int findShortestSubArray(int[] nums) {
+        // Maximum value is 49999
+        int[] count = new int[50000];
+        int[] first = new int[50000];
+        int[] last = new int[50000];
+        // Initialize first occurrence array
+        for (int i = 0; i < 50000; i++) {
+            first[i] = -1;
+        }
+        int degree = 0;
+        // Find frequency, first position and last position
+        for (int i = 0; i < nums.length; i++) {
+            int num = nums[i];
+            if (first[num] == -1) {
+                first[num] = i;
+            }
+            last[num] = i;
+            count[num]++;
+            // Find maximum frequency (degree)
+            if (count[num] > degree) {
+                degree = count[num];
+            }
+        }
+        int minLength = nums.length;
+        // Find the shortest subarray
+        for (int i = 0; i < 50000; i++) {
+            if (count[i] == degree) {
+                int length = last[i] - first[i] + 1;
+                if (length < minLength) {
+                    minLength = length;
+                }
+            }
+        }
+        return minLength;
+    }
+    public static void main(String[] args) {
+        int[] nums = {1, 2, 2, 3, 1};
+        System.out.println(findShortestSubArray(nums));
+    }
+}
+
+Sample Output
+2
+
+QUESTION 4 –STUDENTS WITH  SECOND LOWEST GRADE USING NESTED LIST
+Inspired by HackerRank
+Problem
+Given the names and grades for each student in a class of students, store them in a nested list and print the name(s) of any student(s) having the second lowest grade.
+Note: If there are multiple students with the second lowest grade, order their names alphabetically and print each name on a new line.
+Example
+    	The ordered list of scores is, so the second lowest score is. There are two students with that score: Ordered alphabetically, the names are printed as:
+alpha
+beta
+Input Format
+The first line contains an integer, , the number of students.
+The  subsequent lines describe each student over  lines.
+- The first line contains a student's name.
+- The second line contains their grade.
+Constraints
+•	There will always be one or more students having the second lowest grade.
+Output Format
+Print the name(s) of any student(s) having the second lowest grade in. If there are multiple students, order their names alphabetically and print each one on a new line.
+
+Solution – Java
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        // Number of students
+        int n = sc.nextInt();
+        sc.nextLine();
+        // Store student names and grades
+        String[] names = new String[n];
+        double[] grades = new double[n];
+        // Input student details
+        for (int i = 0; i < n; i++) {
+            names[i] = sc.nextLine();
+            grades[i] = sc.nextDouble();
+            sc.nextLine();
+        }
+        // Find the lowest grade
+        double lowest = grades[0];
+        for (int i = 0; i < n; i++) {
+            if (grades[i] < lowest) {
+                lowest = grades[i];
+            }
+        }
+        // Find the second lowest grade
+        double secondLowest = Double.MAX_VALUE;
+        for (int i = 0; i < n; i++) {
+            if (grades[i] > lowest && grades[i] < secondLowest) {
+                secondLowest = grades[i];
+            }
+        }
+        // Store names with the second lowest grade
+        ArrayList<String> result = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            if (grades[i] == secondLowest) {
+                result.add(names[i]);
+            }
+        }
+        // Sort names alphabetically
+        Collections.sort(result);
+        // Print names
+        for (String name : result) {
+            System.out.println(name);
+        }
+    }
+}
+
+Sample Input
+5
+Harry
+37.21
+Berry
+37.21
+Tina
+37.2
+Akriti
+41
+Harsh
+39
+Sample Output
+Berry
+Harry
+
+QUESTION 5 - JAVA ARRAYLIST 
+Inspired by HackerRank 
+Problem
+You are given lines. In each line there are zero or more integers. You need to answer a few queries where you need to tell the number located in position of line. 
+Take your input from System.in.
+Input Format
+The first line has an integer . In each of the next lines there will be an integer denoting number of integers on that line and then there will be space-separated integers. In the next line there will be an integer denoting number of queries. Each query will consist of two integers and .
+•	Each number will fit in signed integer.
+•	Total number of integers in lines will not cross .
+Output Format
+In each line, output the number located in yth position of xth line. If there is no such position, just print "ERROR!"
+Program
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        // Read number of lines
+        int n = sc.nextInt();
+
+        // Nested ArrayList
+        ArrayList<ArrayList<Integer>> list = new ArrayList<>();
+        // Read integers for each line
+        for (int i = 0; i < n; i++) {
+            int d = sc.nextInt();
+            ArrayList<Integer> row = new ArrayList<>();
+            for (int j = 0; j < d; j++) {
+                row.add(sc.nextInt());
+            }
+            list.add(row);
+        }
+        // Number of queries
+        int q = sc.nextInt();
+        // Process queries
+        for (int i = 0; i < q; i++) {
+            int x = sc.nextInt();
+            int y = sc.nextInt();
+            // Convert 1-based position to 0-based index
+            x--;
+            y--;
+            // Check whether the position exists
+            if (x < list.size() && y < list.get(x).size()) {
+                System.out.println(list.get(x).get(y));
+            } else {
+                System.out.println("ERROR!");
+            }
+        }
+        sc.close();
+    }
+}
+Sample Input
+5
+5 41 77 74 22 44
+1 12
+4 37 34 36 52
+0
+3 20 22 33
+5
+1 3
+3 4
+3 1
+5 5
+4 1 
+Sample Output
+74
+52
+37
+ERROR!
+ERROR! 
+
+QUESTION 6 – PASCAL'S TRIANGLE 
+Inspired by LeetCode(118)
+Problem
+Given an integer numRows, return the first numRows of Pascal's triangle. In Pascal's triangle, each number is the sum of the two numbers directly above it as shown: 
+Example 1:
+Input: numRows = 5
+Output: [[1],[1,1],[1,2,1],[1,3,3,1],[1,4,6,4,1]]
+Example 2:
+Input: numRows = 1
+Output: [[1]]
+ Constraints:
+•	1 <= numRows <= 30
+
+Solution – Java
+import java.util.*;
+public class Main {
+    public static List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> triangle = new ArrayList<>();
+        for (int i = 0; i < numRows; i++) {
+            List<Integer> row = new ArrayList<>();
+            for (int j = 0; j <= i; j++) {
+                // First and last elements are always 1
+                if (j == 0 || j == i) {
+                    row.add(1);
+                } else {
+                    // Add the two numbers from the previous row
+                    int value = triangle.get(i - 1).get(j - 1)
+                              + triangle.get(i - 1).get(j);
+                    row.add(value);
+                }
+            }
+            triangle.add(row);
+        }
+        return triangle;
+    }
+    public static void main(String[] args) {
+        int numRows = 5;
+        System.out.println(generate(numRows));
+    }
+}
+ 
+Sample Input
+5
+Sample Output
+[[1], [1, 1], [1, 2, 1], [1, 3, 3, 1], [1, 4, 6, 4, 1]]
+
+QUESTION 7 – TREE: PREORDER TRAVERSAL
+Inspired by HackerRank
+Problem
+Complete the function in the editor below, which has parameter: a pointer to the root of a binary tree. It must print the values in the tree's preorder traversal as a single line of space-separated values. 
+Input Format
+Our test code passes the root node of a binary tree to the preOrder function.
+Constraints
+Nodes in the tree 
+Output Format
+Print the tree's preorder traversal as a single line of space-separated values.
+Solution – Java
+// Node class
+class Node {
+    int data;
+    Node left;
+    Node right;
+    // Constructor
+    Node(int data) {
+        this.data = data;
+        left = null;
+        right = null;
+    }
+}
+public class Main {
+    // Preorder Traversal
+    public static void preOrder(Node root) {
+        // Base condition
+        if (root == null) {
+            return;
+        }
+        // 1. Print Root
+        System.out.print(root.data + " ");
+
+        // 2. Visit Left subtree
+        preOrder(root.left);
+        // 3. Visit Right subtree
+        preOrder(root.right);
+    }
+    public static void main(String[] args) {
+        // Create the binary tree
+        Node root = new Node(1);
+        root.left = new Node(2);
+        root.right = new Node(3);
+        root.left.left = new Node(4);
+        root.left.right = new Node(5);
+        // Print preorder traversal
+        System.out.println("Preorder Traversal:");
+        preOrder(root);
+    }
+}
+
+Sample Output
+Preorder Traversal:
+1 2 4 5 3
+
+QUESTION 8 – TWO SUM
+Problem
+Find two numbers in an array whose sum equals a target value.
+Example
+Input: nums = [2, 7, 11, 15]
+Target = 9
+Output: [0, 1]
+
+Solution – Java
+public class Main {
+    public static void main(String[] args) {
+        int[] nums = {2, 7, 11, 15};
+        int target = 9;
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i + 1; j < nums.length; j++) {
+                if (nums[i] + nums[j] == target) {
+                    System.out.println(i + " " + j);
+                    return;
+                }
+            }
+        }
+    }}
+
+Sample Output
+Index: 0 1 2 3 Array: 2 7 11 15 2 + 7 = 9 
+Answer → Index 0 and 1
+
+QUESTION 9 – MIGRATORY BIRDS
+Inspired by HackerRank
+Problem
+Given an array of bird sightings where every element represents a bird type id, determine the id of the most frequently sighted type. If more than 1 type has been spotted that maximum amount, return the smallest of their ids.
+Example
+There are two each of types  and , and one sighting of type . Pick the lower of the two types seen twice: type .
+Function Description
+Complete the migratoryBirds function in the editor below.
+migratoryBirds has the following parameter(s):
+•	int arr[n]: the types of birds sighted
+Returns
+•	int: the lowest type id of the most frequently sighted birds
+Input Format
+The first line contains an integer, , the size of .
+The second line describes  as  space-separated integers, each a type number of the bird sighted.
+
+Solution – Java
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        // Read number of bird sightings
+        int n = sc.nextInt();
+        // Array to count each bird type
+        int[] count = new int[6];
+        // Read bird types and count them
+        for (int i = 0; i < n; i++) {
+            int bird = sc.nextInt();
+            count[bird]++;
+        }
+        int max = 0;
+        int result = 0;
+        // Find the bird with maximum frequency
+        for (int i = 1; i <= 5; i++) {
+            if (count[i] > max) {
+                max = count[i];
+                result = i;
+            }
+        }
+        // Print the most frequently sighted bird
+        System.out.println(result);
+        sc.close();
+    }
+}
+Sample Input
+6
+1 4 4 4 5 3
+Sample Output
+4
+
+QUESTION 10 – SMART TRAFFIC NAVIGATION
+Lab Manual Based – Task 8
+Problem Description
+A smart city application stores road connectivity information using nested collections. Given city junctions and roads, determine whether a route exists between two junctions using graph representation with collections.
+Input Format
+•	First line contains integers N and M.
+•	Next M lines contain connected junction pairs.
+•	Last line contains source and destination.
+Output Format
+Print YES if route exists, otherwise NO.
+Constraints
+•	1 ≤ N ≤ 10^5
+•	1 ≤ M ≤ 2×10^5
+Sample Input
+5 4
+1 2
+2 3
+3 4
+4 5
+1 5
+Sample Output
+YES
+Solution – Java
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt(); // Number of junctions
+        int m = sc.nextInt(); // Number of roads
+        // Create graph
+        ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i <= n; i++) {
+            graph.add(new ArrayList<>());
+        }
+        // Add roads
+        for (int i = 0; i < m; i++) {
+            int a = sc.nextInt();
+            int b = sc.nextInt();
+            graph.get(a).add(b);
+            graph.get(b).add(a);
+        }
+        // Source and destination
+        int source = sc.nextInt();
+        int destination = sc.nextInt();
+        // BFS
+        boolean[] visited = new boolean[n + 1];
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(source);
+        visited[source] = true;
+        while (!queue.isEmpty()) {
+            int current = queue.poll();
+            for (int next : graph.get(current)) {
+                if (!visited[next]) {
+                    visited[next] = true;
+                    queue.add(next);
+                }
+            }
+        }
+        // Check destination
+        if (visited[destination]) {
+            System.out.println("YES");
+        } else {
+            System.out.println("NO");
+        }
+    }
+}
+Sample Input
+5 4
+1 2
+2 3
+3 4
+4 5
+1 5
+Sample Output
+Yes
+
+
+
+
+Unit: IV – Advanced Data Handling using Collections
+Topic : Efficient collection manipulation and optimization techniques.
+Question 1 – Hashtag Frequency Counter
+Problem
+A social media platform receives N hashtags. Count the frequency of each hashtag and display the hashtags along with their frequencies.
+If multiple hashtags have the same frequency, display them in lexicographical order.
+Program
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        Map<String, Integer> freq = new HashMap<>();
+
+        for (int i = 0; i < n; i++) {
+            String tag = sc.next();
+            freq.put(tag, freq.getOrDefault(tag, 0) + 1);
+        }
+
+        List<String> hashtags = new ArrayList<>(freq.keySet());
+
+        hashtags.sort((a, b) -> {
+            int cmp = Integer.compare(freq.get(a), freq.get(b));
+            if (cmp != 0)
+                return cmp;
+            return a.compareTo(b);
+        });
+
+        for (String tag : hashtags) {
+            System.out.println(tag + " " + freq.get(tag));
+        }
+    }
+}
+Collection Concepts
+•	HashMap for frequency counting
+•	ArrayList for storing keys
+•	Custom comparator for sorting
+
+Sample Input
+7
+java
+python
+java
+ai
+python
+java
+cloud
+Sample Output
+ai 1
+cloud 1
+python 2
+java 3
+
+Question 2 – Sparse String Queries
+Inspired by HackerRank – Sparse Arrays
+Problem
+You are given a collection of strings followed by a collection of query strings. For every query, determine how many times it occurs in the original collection.
+For large input, the solution should avoid scanning the entire collection for every query.
+Program
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        Map<String, Integer> frequency = new HashMap<>();
+
+        for (int i = 0; i < n; i++) {
+            String s = sc.next();
+            frequency.put(s, frequency.getOrDefault(s, 0) + 1);
+        }
+
+        int q = sc.nextInt();
+
+        while (q-- > 0) {
+            String query = sc.next();
+            System.out.println(frequency.getOrDefault(query, 0));
+        }
+    }
+}
+Sample Input
+6
+aba
+baba
+aba
+xzxb
+aba
+baba
+4
+aba
+baba
+xzxb
+abc
+Sample Output
+3
+2
+1
+0
+Question 3 – Top K Frequent Elements
+Inspired by LeetCode 347
+Problem
+Given an integer array and an integer K, find the K most frequently occurring elements.
+Solution – Java
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int[] arr = new int[n];
+
+        Map<Integer, Integer> freq = new HashMap<>();
+
+        for (int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+            freq.put(arr[i], freq.getOrDefault(arr[i], 0) + 1);
+        }
+
+        int k = sc.nextInt();
+
+        PriorityQueue<Integer> pq =
+            new PriorityQueue<>((a, b) -> freq.get(a) - freq.get(b));
+
+        for (int x : freq.keySet()) {
+            pq.offer(x);
+
+            if (pq.size() > k)
+                pq.poll();
+        }
+
+        List<Integer> result = new ArrayList<>();
+
+        while (!pq.isEmpty())
+            result.add(pq.poll());
+
+        Collections.reverse(result);
+
+        for (int x : result)
+            System.out.print(x + " ");
+    }
+}
+Example
+For:
+1 1 1 2 2 3 3 4
+frequencies are:
+1 → 3
+2 → 2
+3 → 2
+4 → 1
+Therefore, the two most frequent elements are:
+1 2
+Sample Input
+8
+1 1 1 2 2 3 3 4
+2
+Sample Output
+1 2
+LeetCode classifies Top K Frequent Elements as a Medium problem and specifically associates it with hash tables, heaps, sorting and bucket-based approaches.
+Question 4 – Group Anagrams
+Inspired by LeetCode 49
+Problem
+Given a list of strings, group strings that are anagrams of one another.
+Two strings are anagrams if they contain the same characters with the same frequencies.
+Solution – Java
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+
+        Map<String, List<String>> groups = new HashMap<>();
+
+        for (int i = 0; i < n; i++) {
+            String word = sc.next();
+
+            char[] chars = word.toCharArray();
+            Arrays.sort(chars);
+
+            String key = new String(chars);
+
+            groups.computeIfAbsent(key, k -> new ArrayList<>())
+                  .add(word);
+        }
+
+        for (List<String> group : groups.values()) {
+            System.out.println(group);
+        }
+    }
+}
+Example
+eat → aet
+tea → aet
+ate → aet
+Therefore they belong to the same group.
+Collection Concepts
+•	HashMap
+•	Nested List
+•	computeIfAbsent()
+•	Character-array transformation
+
+Sample Input
+6
+eat
+tea
+tan
+ate
+nat
+bat
+Sample Output
+[bat]
+[nat, tan]
+[ate, eat, tea]
+LeetCode's Group Anagrams is a Medium problem based on arrays, hash tables and sorting.
+Question 5 – Frequency Queries
+Inspired by HackerRank – Frequency Queries
+Problem
+Maintain a collection of integers and support three operations:
+1 x → Insert x
+2 x → Delete one occurrence of x
+3 f → Check whether any number occurs exactly f times
+Print 1 if an element has frequency f, otherwise print 0.
+Optimized Java Solution
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int q = sc.nextInt();
+
+        Map<Integer, Integer> valueFreq = new HashMap<>();
+        Map<Integer, Integer> freqCount = new HashMap<>();
+
+        while (q-- > 0) {
+            int type = sc.nextInt();
+            int x = sc.nextInt();
+
+            if (type == 1) {
+                int oldFreq = valueFreq.getOrDefault(x, 0);
+                int newFreq = oldFreq + 1;
+
+                valueFreq.put(x, newFreq);
+
+                if (oldFreq > 0)
+                    freqCount.put(oldFreq,
+                        freqCount.get(oldFreq) - 1);
+
+                freqCount.put(newFreq,
+                    freqCount.getOrDefault(newFreq, 0) + 1);
+            }
+
+            else if (type == 2) {
+                int oldFreq = valueFreq.getOrDefault(x, 0);
+
+                if (oldFreq > 0) {
+                    int newFreq = oldFreq - 1;
+
+                    valueFreq.put(x, newFreq);
+
+                    freqCount.put(oldFreq,
+                        freqCount.get(oldFreq) - 1);
+
+                    if (newFreq > 0)
+                        freqCount.put(newFreq,
+                            freqCount.getOrDefault(newFreq, 0) + 1);
+                }
+            }
+
+            else if (type == 3) {
+                System.out.println(
+                    freqCount.getOrDefault(x, 0) > 0 ? 1 : 0
+                );
+            }
+        }
+    }
+}
+Important Optimization
+Maintaining only:
+value → frequency
+would make operation 3 expensive because we would need to search all values.
+Instead we maintain:
+value → frequency
+frequency → number of values having that frequency
+Sample Input
+8
+1 5
+1 6
+3 2
+1 10
+1 10
+1 6
+2 5
+3 2
+Sample Output
+0
+1
+This is directly inspired by HackerRank's Medium Frequency Queries problem.
+
+Question 6 – Maximum Number of Distinct Elements in a Sliding Window
+Problem
+Given an array and a window size K, find the maximum number of distinct elements present in any contiguous window of size K.
+Solution – Java
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int[] arr = new int[n];
+
+        for (int i = 0; i < n; i++)
+            arr[i] = sc.nextInt();
+
+        int k = sc.nextInt();
+
+        Map<Integer, Integer> freq = new HashMap<>();
+
+        for (int i = 0; i < k; i++)
+            freq.put(arr[i], freq.getOrDefault(arr[i], 0) + 1);
+
+        int maxDistinct = freq.size();
+
+        for (int i = k; i < n; i++) {
+
+            int outgoing = arr[i - k];
+
+            freq.put(outgoing, freq.get(outgoing) - 1);
+
+            if (freq.get(outgoing) == 0)
+                freq.remove(outgoing);
+
+            int incoming = arr[i];
+
+            freq.put(incoming,
+                    freq.getOrDefault(incoming, 0) + 1);
+
+            maxDistinct = Math.max(maxDistinct, freq.size());
+        }
+
+        System.out.println(maxDistinct);
+    }
+}
+Optimization
+Do not recreate a HashSet for every window.
+Instead, update the existing frequency map by:
+1.	Removing the outgoing element.
+2.	Adding the incoming element.
+3.	Checking map.size().
+
+Sample Input
+8
+1 2 1 3 4 3 2 1
+4
+Sample Output
+4
+Explanation
+Windows:
+1 2 1 3 → 3 distinct
+2 1 3 4 → 4 distinct
+1 3 4 3 → 3 distinct
+3 4 3 2 → 3 distinct
+4 3 2 1 → 4 distinct
+Maximum = 4.
+This is an important example of efficient collection manipulation using a sliding-window technique.
+Question 7 – Smart Traffic Navigation
+Lab Manual Based – Task 8
+Problem
+A city has N junctions and M roads. Each road connects two junctions.
+Using a nested collection, determine whether a route exists from a source junction to a destination junction.
+Solution – Java
+import java.util.*;
+
+public class Main {
+
+    static boolean routeExists(
+            Map<Integer, List<Integer>> graph,
+            int source,
+            int destination) {
+
+        Queue<Integer> queue = new LinkedList<>();
+        Set<Integer> visited = new HashSet<>();
+
+        queue.offer(source);
+        visited.add(source);
+
+        while (!queue.isEmpty()) {
+
+            int current = queue.poll();
+
+            if (current == destination)
+                return true;
+
+            for (int next : graph.getOrDefault(
+                    current, new ArrayList<>())) {
+
+                if (!visited.contains(next)) {
+                    visited.add(next);
+                    queue.offer(next);
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+
+        Map<Integer, List<Integer>> graph =
+            new HashMap<>();
+
+        for (int i = 1; i <= n; i++)
+            graph.put(i, new ArrayList<>());
+
+        for (int i = 0; i < m; i++) {
+
+            int u = sc.nextInt();
+            int v = sc.nextInt();
+
+            graph.get(u).add(v);
+            graph.get(v).add(u);
+        }
+
+        int source = sc.nextInt();
+        int destination = sc.nextInt();
+
+        System.out.println(
+            routeExists(graph, source, destination)
+            ? "YES" : "NO"
+        );
+    }
+}
+Collection Structure
+The graph is represented as:
+HashMap<Integer, ArrayList<Integer>>
+For example:
+1 → [2]
+2 → [1,3,6]
+3 → [2,4]
+4 → [3,5]
+5 → [4]
+6 → [2]
+Sample Input
+6 5
+1 2
+2 3
+3 4
+4 5
+2 6
+1 5
+Sample Output
+YES
+This directly extends the Lab Manual's Smart Traffic Navigation System, which specifies nested collections and graph representation.
+Question 8 – Most Frequent Words with Lexicographical Tie Breaking
+Inspired by LeetCode 692
+Problem
+Given N words and an integer K, find the K most frequent words.
+Rules:
+1.	Higher frequency comes first.
+2.	If two words have the same frequency, the lexicographically smaller word comes first.
+Solution – Java
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+
+        Map<String, Integer> freq = new HashMap<>();
+
+        for (int i = 0; i < n; i++) {
+            String word = sc.next();
+            freq.put(word,
+                    freq.getOrDefault(word, 0) + 1);
+        }
+
+        int k = sc.nextInt();
+
+        PriorityQueue<String> pq =
+            new PriorityQueue<>((a, b) -> {
+
+                if (!freq.get(a).equals(freq.get(b)))
+                    return Integer.compare(
+                        freq.get(a), freq.get(b));
+
+                return b.compareTo(a);
+            });
+
+        for (String word : freq.keySet()) {
+
+            pq.offer(word);
+
+            if (pq.size() > k)
+                pq.poll();
+        }
+
+        List<String> result = new ArrayList<>();
+
+        while (!pq.isEmpty())
+            result.add(pq.poll());
+
+        Collections.reverse(result);
+
+        for (String word : result)
+            System.out.println(word);
+    }
+}
+Collection Concepts
+•	HashMap → frequency indexing
+•	PriorityQueue → efficient top-K selection
+•	Custom comparator → tie handling
+
+Sample Input
+8
+java
+python
+java
+ai
+python
+java
+ai
+cloud
+2
+Sample Output
+java
+ai
+This is based on the Medium-level Top K Frequent Words problem.
+Question 9 – Student Marks Indexing System
+Problem
+A university stores student records containing:
+Student ID
+Student Name
+Marks
+Given multiple queries containing a student ID, efficiently retrieve the corresponding student's name and marks.
+The solution must avoid scanning all student records for each query.
+Solution – Java
+import java.util.*;
+
+class Student {
+    String name;
+    int marks;
+
+    Student(String name, int marks) {
+        this.name = name;
+        this.marks = marks;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+
+        Map<Integer, Student> index = new HashMap<>();
+
+        for (int i = 0; i < n; i++) {
+
+            int id = sc.nextInt();
+            String name = sc.next();
+            int marks = sc.nextInt();
+
+            index.put(id, new Student(name, marks));
+        }
+
+        int q = sc.nextInt();
+
+        while (q-- > 0) {
+
+            int id = sc.nextInt();
+
+            Student s = index.get(id);
+
+            if (s != null)
+                System.out.println(
+                    s.name + " " + s.marks);
+            else
+                System.out.println("NOT FOUND");
+        }
+    }
+}
+Why is this optimized?
+Naive approach:
+For every query:
+    Search all students
+Sample Input
+5
+101 Arun 85
+102 Bala 92
+103 Charan 78
+104 Divya 95
+105 Esha 88
+3
+104
+101
+103
+Sample Output
+Divya 95
+Arun 85
+Charan 78
+This demonstrates associative collections, indexing and efficient data retrieval, which are explicit Unit-IV topics.
+Question 10 – Product Inventory and Low-Stock Analysis
+Based on Lab Manual – Super Market Billing System
+Problem
+A supermarket maintains product information:
+Product ID
+Product Name
+Stock
+Price
+Perform the following:
+1.	Update stock after sales.
+2.	Find products whose stock is below a given threshold.
+3.	Display products sorted by remaining stock.
+4.	Efficiently retrieve products using their ID.
+Solution – Java
+import java.util.*;
+
+class Product {
+    int id;
+    String name;
+    int stock;
+    int price;
+
+    Product(int id, String name, int stock, int price) {
+        this.id = id;
+        this.name = name;
+        this.stock = stock;
+        this.price = price;
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+
+        Map<Integer, Product> products =
+            new HashMap<>();
+
+        for (int i = 0; i < n; i++) {
+
+            int id = sc.nextInt();
+            String name = sc.next();
+            int stock = sc.nextInt();
+            int price = sc.nextInt();
+
+            products.put(id,
+                new Product(id, name, stock, price));
+        }
+
+        int sales = sc.nextInt();
+
+        for (int i = 0; i < sales; i++) {
+
+            int id = sc.nextInt();
+            int quantity = sc.nextInt();
+
+            Product p = products.get(id);
+
+            if (p != null && p.stock >= quantity)
+                p.stock -= quantity;
+        }
+
+        int threshold = sc.nextInt();
+
+        List<Product> lowStock =
+            new ArrayList<>();
+
+        for (Product p : products.values()) {
+
+            if (p.stock <= threshold)
+                lowStock.add(p);
+        }
+
+        lowStock.sort(
+            Comparator.comparingInt(p -> p.stock)
+        );
+
+        for (Product p : lowStock) {
+
+            System.out.println(
+                p.id + " " +
+                p.name + " " +
+                p.stock
+            );
+        }
+    }
+}
+Collection Concepts
+This problem combines:
+•	HashMap → product indexing
+•	ArrayList → low-stock products
+•	Comparator → sorting
+•	Object collections → product records
+•	Efficient update and retrieval
+
+Sample Input
+5
+101 Rice 50 120
+102 Sugar 20 45
+103 Oil 10 150
+104 Milk 30 60
+105 Tea 8 180
+3
+101 20
+103 5
+105 3
+5
+Here each sale is:
+ProductID QuantitySold
+Sample Output
+105 Tea 5
+103 Oil 5
+102 Sugar 20
+The problem is aligned with the Lab Manual's Super Market Billing System, which includes inventory tracking, low-stock detection and sorting products.
+
+TASK 7:
+
+Hashtag Frequency Counter
+Problem Description
+Count frequency of hashtags appearing in social media posts using maps/dictionaries.
+Input Format
+•	First line contains integer N.
+•	Next N lines contain hashtags.
+Output Format
+Display hashtag frequencies.
+Sample Input
+5
+java
+python
+java
+ai
+python
+Sample Output
+java 2
+python 2
+ai 1
+
+Solution
+
+import java.util.*;
+
+public class HashtagFrequencyCounter {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // Read the number of hashtags
+        int N = sc.nextInt();
+
+        // HashMap to store hashtag and its frequency
+        HashMap<String, Integer> frequency = new HashMap<>();
+
+        // Read N hashtags
+        for (int i = 0; i < N; i++) {
+            String hashtag = sc.next();
+
+            // Increase frequency by 1
+            frequency.put(hashtag, frequency.getOrDefault(hashtag, 0) + 1);
+        }
+
+        // Display hashtag frequencies
+        for (Map.Entry<String, Integer> entry : frequency.entrySet()) {
+            System.out.println(entry.getKey() + " " + entry.getValue());
+        }
+
+        sc.close();
+    }
+}
+Sample Input
+5
+java
+python
+java
+ai
+python
+Sample Output
+java 2
+python 2
+ai 1
+
+TASK 8 – SMART TRAFFIC NAVIGATION
+
+Problem Description
+A smart city application stores road connectivity information using nested collections. Given city junctions and roads, determine whether a route exists between two junctions using graph representation with collections.
+Input Format
+•	First line contains integers N and M.
+•	Next M lines contain connected junction pairs.
+•	Last line contains source and destination.
+Output Format
+Print YES if route exists, otherwise NO.
+Constraints
+•	1 ≤ N ≤ 10^5
+•	1 ≤ M ≤ 2×10^5
+Sample Input
+5 4
+1 2
+2 3
+3 4
+4 5
+1 5
+Sample Output
+YES
+
+Solution 
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt(); // Number of junctions
+        int m = sc.nextInt(); // Number of roads
+        // Create graph
+        ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i <= n; i++) {
+            graph.add(new ArrayList<>());
+        }
+        // Add roads
+        for (int i = 0; i < m; i++) {
+            int a = sc.nextInt();
+            int b = sc.nextInt();
+            graph.get(a).add(b);
+            graph.get(b).add(a);
+        }
+        // Source and destination
+        int source = sc.nextInt();
+        int destination = sc.nextInt();
+        // BFS
+        boolean[] visited = new boolean[n + 1];
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(source);
+        visited[source] = true;
+        while (!queue.isEmpty()) {
+            int current = queue.poll();
+            for (int next : graph.get(current)) {
+                if (!visited[next]) {
+                    visited[next] = true;
+                    queue.add(next);
+                }
+            }
+        }
+        // Check destination
+        if (visited[destination]) {
+            System.out.println("YES");
+        } else {
+            System.out.println("NO");
+        }
+    }
+}
+Sample Input
+5 4
+1 2
+2 3
+3 4
+4 5
+1 5
+Sample Output
+Yes
+
