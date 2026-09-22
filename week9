@@ -1,0 +1,713 @@
+Basic Exception Handling
+public class ExceptionExample {
+    public static void main(String[] args) {
+
+        try {
+            int a = 10;
+            int b = 0;
+
+            int result = a / b;
+
+            System.out.println("Result = " + result);
+        }
+        catch (ArithmeticException e) {
+            System.out.println("Cannot divide by zero");
+        }
+
+        System.out.println("Program continues...");
+    }
+}
+Output:
+Cannot divide by zero
+Program continues...
+2. Handling Invalid Array Access
+public class ArrayException {
+    public static void main(String[] args) {
+
+        int[] arr = {10, 20, 30};
+
+        try {
+            System.out.println(arr[5]);
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Invalid array index");
+        }
+    }
+}
+Output:
+Invalid array index
+3. Input Error Handling
+import java.util.*;
+
+public class InputException {
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            System.out.print("Enter an integer: ");
+            int n = sc.nextInt();
+
+            System.out.println("Number = " + n);
+        }
+        catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter an integer.");
+        }
+    }
+}
+If the input is:
+25
+Output:
+Number = 25
+If the input is:
+abc
+Output:
+Invalid input. Please enter an integer.
+________________________________________
+4. Better Strategy in Competitive Programming
+For competitive programming, it is usually better to check the condition before performing the operation.
+Example: Avoid division by zero
+Instead of:
+try {
+    int result = a / b;
+}
+catch (ArithmeticException e) {
+    System.out.println("Error");
+}
+Prefer:
+if (b != 0) {
+    int result = a / b;
+    System.out.println(result);
+} else {
+    System.out.println("Division by zero is not allowed");
+}
+This is generally simpler and avoids using exceptions for predictable situations.
+________________________________________
+5. Exception Handling with a Custom Exception
+class NegativeNumberException extends Exception {
+
+    NegativeNumberException(String message) {
+        super(message);
+    }
+}
+
+public class CustomExceptionDemo {
+
+    static void checkNumber(int n) throws NegativeNumberException {
+
+        if (n < 0) {
+            throw new NegativeNumberException(
+                "Negative numbers are not allowed"
+            );
+        }
+
+        System.out.println("Valid number: " + n);
+    }
+
+    public static void main(String[] args) {
+
+        try {
+            checkNumber(-5);
+        }
+        catch (NegativeNumberException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}
+Output:
+Negative numbers are not allowed
+________________________________________
+Error-Handling Strategies
+Situation	Strategy
+Division by zero	Check denominator before division
+Invalid array index	Check index range
+Invalid input	Validate input
+Empty array	Check length == 0
+Null object	Check for null
+Integer overflow	Use long where required
+Invalid mathematical operation	Check conditions
+Unexpected runtime error	try-catch
+Special application error	Custom exception
+Task 3 – Vehicle Rental System
+Concept Used
+•	Inheritance 
+•	Method overriding 
+•	Runtime polymorphism 
+•	Base class and subclasses 
+Java Program
+import java.util.*;
+
+class Vehicle {
+    String vehicleNumber;
+    double rentPerDay;
+
+    Vehicle(String vehicleNumber, double rentPerDay) {
+        this.vehicleNumber = vehicleNumber;
+        this.rentPerDay = rentPerDay;
+    }
+
+    double calculateRent(int days) {
+        return rentPerDay * days;
+    }
+}
+
+class Car extends Vehicle {
+
+    Car(String vehicleNumber, double rentPerDay) {
+        super(vehicleNumber, rentPerDay);
+    }
+
+    @Override
+    double calculateRent(int days) {
+        return rentPerDay * days;
+    }
+}
+
+class Bike extends Vehicle {
+
+    Bike(String vehicleNumber, double rentPerDay) {
+        super(vehicleNumber, rentPerDay);
+    }
+
+    @Override
+    double calculateRent(int days) {
+        return rentPerDay * days * 0.90;
+    }
+}
+
+class Truck extends Vehicle {
+
+    Truck(String vehicleNumber, double rentPerDay) {
+        super(vehicleNumber, rentPerDay);
+    }
+
+    @Override
+    double calculateRent(int days) {
+        return rentPerDay * days * 1.20;
+    }
+}
+
+public class VehicleRentalSystem {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int N = sc.nextInt();
+
+        for (int i = 0; i < N; i++) {
+
+            int vehicleType = sc.nextInt();
+            String vehicleNumber = sc.next();
+            double rentPerDay = sc.nextDouble();
+            int days = sc.nextInt();
+
+            // Runtime polymorphism
+            Vehicle vehicle;
+
+            if (vehicleType == 1) {
+                vehicle = new Car(vehicleNumber, rentPerDay);
+            }
+            else if (vehicleType == 2) {
+                vehicle = new Bike(vehicleNumber, rentPerDay);
+            }
+            else {
+                vehicle = new Truck(vehicleNumber, rentPerDay);
+            }
+
+            double totalRent = vehicle.calculateRent(days);
+
+            System.out.printf(
+                "%s %.2f%n",
+                vehicleNumber,
+                totalRent
+            );
+        }
+
+        sc.close();
+    }
+}
+Sample Input
+3
+1 CAR101 2000 3
+2 BIKE201 500 4
+3 TRUCK301 3000 2
+Calculation
+Car:
+2000 × 3 = 6000
+Bike:
+500 × 4 × 0.90 = 1800
+Truck:
+3000 × 2 × 1.20 = 7200
+Output
+CAR101 6000.00
+BIKE201 1800.00
+TRUCK301 7200.00
+Where is Runtime Polymorphism?
+This is the important part:
+Vehicle vehicle;
+
+vehicle = new Car(...);
+vehicle.calculateRent(days);
+or
+vehicle = new Bike(...);
+vehicle.calculateRent(days);
+or
+vehicle = new Truck(...);
+vehicle.calculateRent(days);
+The reference is of type Vehicle, but the method that executes depends on the actual object created at runtime.
+________________________________________
+Task 4 – Payment Processing System
+Concepts Used
+•	Interface 
+•	Abstract class 
+•	Inheritance 
+•	Method overriding 
+•	Runtime polymorphism 
+•	Extensibility 
+Java Program
+import java.util.*;
+
+interface Payment {
+    void pay(double amount);
+}
+
+class CreditCardPayment implements Payment {
+
+    public void pay(double amount) {
+        System.out.println("Payment through Credit Card");
+    }
+}
+
+class UPIPayment implements Payment {
+
+    public void pay(double amount) {
+        System.out.println("Payment through UPI");
+    }
+}
+
+class NetBankingPayment implements Payment {
+
+    public void pay(double amount) {
+        System.out.println("Payment through Net Banking");
+    }
+}
+
+abstract class PaymentProcessor {
+
+    abstract double processPayment(Payment payment, double amount);
+}
+
+class OnlinePaymentProcessor extends PaymentProcessor {
+
+    @Override
+    double processPayment(Payment payment, double amount) {
+
+        if (payment instanceof CreditCardPayment) {
+
+            return amount + (amount * 0.02);
+        }
+
+        else if (payment instanceof UPIPayment) {
+
+            return amount + (amount * 0.01);
+        }
+
+        else if (payment instanceof NetBankingPayment) {
+
+            return amount + (amount * 0.015);
+        }
+
+        return amount;
+    }
+}
+
+public class PaymentProcessingSystem {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int N = sc.nextInt();
+
+        PaymentProcessor processor =
+                new OnlinePaymentProcessor();
+
+        for (int i = 0; i < N; i++) {
+
+            int paymentType = sc.nextInt();
+            double amount = sc.nextDouble();
+
+            Payment payment;
+
+            if (paymentType == 1) {
+                payment = new CreditCardPayment();
+            }
+            else if (paymentType == 2) {
+                payment = new UPIPayment();
+            }
+            else {
+                payment = new NetBankingPayment();
+            }
+
+            double finalAmount =
+                    processor.processPayment(payment, amount);
+
+            String paymentName;
+
+            if (paymentType == 1) {
+                paymentName = "CreditCard";
+            }
+            else if (paymentType == 2) {
+                paymentName = "UPI";
+            }
+            else {
+                paymentName = "NetBanking";
+            }
+
+            System.out.printf(
+                "%s %.2f%n",
+                paymentName,
+                finalAmount
+            );
+        }
+
+        sc.close();
+    }
+}
+Sample Input
+3
+1 1000
+2 2000
+3 5000
+Calculation
+Credit Card:
+1000 + (1000 × 2%)
+= 1000 + 20
+= 1020
+UPI:
+2000 + (2000 × 1%)
+= 2000 + 20
+= 2020
+Net Banking:
+5000 + (5000 × 1.5%)
+= 5000 + 75
+= 5075
+Output
+CreditCard 1020.00
+UPI 2020.00
+NetBanking 5075.00
+________________________________________
+Important Design Flow
+The second program follows this structure:
+                Payment (Interface)
+                       |
+          -----------------------------
+          |             |             |
+    CreditCard       UPI        NetBanking
+          |             |             |
+          -------- PaymentProcessor --------
+                         |
+                OnlinePaymentProcessor
+Why is this design extensible?
+If we want to add:
+WalletPayment
+we can create:
+class WalletPayment implements Payment {
+
+    public void pay(double amount) {
+        System.out.println("Payment through Wallet");
+    }
+}
+Task 3 – Vehicle Rental System
+Concept Used
+•	Inheritance 
+•	Method overriding 
+•	Runtime polymorphism 
+•	Base class and subclasses 
+Java Program
+import java.util.*;
+
+class Vehicle {
+    String vehicleNumber;
+    double rentPerDay;
+
+    Vehicle(String vehicleNumber, double rentPerDay) {
+        this.vehicleNumber = vehicleNumber;
+        this.rentPerDay = rentPerDay;
+    }
+
+    double calculateRent(int days) {
+        return rentPerDay * days;
+    }
+}
+
+class Car extends Vehicle {
+
+    Car(String vehicleNumber, double rentPerDay) {
+        super(vehicleNumber, rentPerDay);
+    }
+
+    @Override
+    double calculateRent(int days) {
+        return rentPerDay * days;
+    }
+}
+
+class Bike extends Vehicle {
+
+    Bike(String vehicleNumber, double rentPerDay) {
+        super(vehicleNumber, rentPerDay);
+    }
+
+    @Override
+    double calculateRent(int days) {
+        return rentPerDay * days * 0.90;
+    }
+}
+
+class Truck extends Vehicle {
+
+    Truck(String vehicleNumber, double rentPerDay) {
+        super(vehicleNumber, rentPerDay);
+    }
+
+    @Override
+    double calculateRent(int days) {
+        return rentPerDay * days * 1.20;
+    }
+}
+
+public class VehicleRentalSystem {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int N = sc.nextInt();
+
+        for (int i = 0; i < N; i++) {
+
+            int vehicleType = sc.nextInt();
+            String vehicleNumber = sc.next();
+            double rentPerDay = sc.nextDouble();
+            int days = sc.nextInt();
+
+            // Runtime polymorphism
+            Vehicle vehicle;
+
+            if (vehicleType == 1) {
+                vehicle = new Car(vehicleNumber, rentPerDay);
+            }
+            else if (vehicleType == 2) {
+                vehicle = new Bike(vehicleNumber, rentPerDay);
+            }
+            else {
+                vehicle = new Truck(vehicleNumber, rentPerDay);
+            }
+
+            double totalRent = vehicle.calculateRent(days);
+
+            System.out.printf(
+                "%s %.2f%n",
+                vehicleNumber,
+                totalRent
+            );
+        }
+
+        sc.close();
+    }
+}
+Sample Input
+3
+1 CAR101 2000 3
+2 BIKE201 500 4
+3 TRUCK301 3000 2
+Calculation
+Car:
+2000 × 3 = 6000
+Bike:
+500 × 4 × 0.90 = 1800
+Truck:
+3000 × 2 × 1.20 = 7200
+Output
+CAR101 6000.00
+BIKE201 1800.00
+TRUCK301 7200.00
+Where is Runtime Polymorphism?
+This is the important part:
+Vehicle vehicle;
+
+vehicle = new Car(...);
+vehicle.calculateRent(days);
+or
+vehicle = new Bike(...);
+vehicle.calculateRent(days);
+or
+vehicle = new Truck(...);
+vehicle.calculateRent(days);
+The reference is of type Vehicle, but the method that executes depends on the actual object created at runtime.
+________________________________________
+Task 4 – Payment Processing System
+Concepts Used
+•	Interface 
+•	Abstract class 
+•	Inheritance 
+•	Method overriding 
+•	Runtime polymorphism 
+•	Extensibility 
+Java Program
+import java.util.*;
+
+interface Payment {
+    void pay(double amount);
+}
+
+class CreditCardPayment implements Payment {
+
+    public void pay(double amount) {
+        System.out.println("Payment through Credit Card");
+    }
+}
+
+class UPIPayment implements Payment {
+
+    public void pay(double amount) {
+        System.out.println("Payment through UPI");
+    }
+}
+
+class NetBankingPayment implements Payment {
+
+    public void pay(double amount) {
+        System.out.println("Payment through Net Banking");
+    }
+}
+
+abstract class PaymentProcessor {
+
+    abstract double processPayment(Payment payment, double amount);
+}
+
+class OnlinePaymentProcessor extends PaymentProcessor {
+
+    @Override
+    double processPayment(Payment payment, double amount) {
+
+        if (payment instanceof CreditCardPayment) {
+
+            return amount + (amount * 0.02);
+        }
+
+        else if (payment instanceof UPIPayment) {
+
+            return amount + (amount * 0.01);
+        }
+
+        else if (payment instanceof NetBankingPayment) {
+
+            return amount + (amount * 0.015);
+        }
+
+        return amount;
+    }
+}
+
+public class PaymentProcessingSystem {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int N = sc.nextInt();
+
+        PaymentProcessor processor =
+                new OnlinePaymentProcessor();
+
+        for (int i = 0; i < N; i++) {
+
+            int paymentType = sc.nextInt();
+            double amount = sc.nextDouble();
+
+            Payment payment;
+
+            if (paymentType == 1) {
+                payment = new CreditCardPayment();
+            }
+            else if (paymentType == 2) {
+                payment = new UPIPayment();
+            }
+            else {
+                payment = new NetBankingPayment();
+            }
+
+            double finalAmount =
+                    processor.processPayment(payment, amount);
+
+            String paymentName;
+
+            if (paymentType == 1) {
+                paymentName = "CreditCard";
+            }
+            else if (paymentType == 2) {
+                paymentName = "UPI";
+            }
+            else {
+                paymentName = "NetBanking";
+            }
+
+            System.out.printf(
+                "%s %.2f%n",
+                paymentName,
+                finalAmount
+            );
+        }
+
+        sc.close();
+    }
+}
+Sample Input
+3
+1 1000
+2 2000
+3 5000
+Calculation
+Credit Card:
+1000 + (1000 × 2%)
+= 1000 + 20
+= 1020
+UPI:
+2000 + (2000 × 1%)
+= 2000 + 20
+= 2020
+Net Banking:
+5000 + (5000 × 1.5%)
+= 5000 + 75
+= 5075
+Output
+CreditCard 1020.00
+UPI 2020.00
+NetBanking 5075.00
+________________________________________
+Important Design Flow
+The second program follows this structure:
+                Payment (Interface)
+                       |
+          -----------------------------
+          |             |             |
+    CreditCard       UPI        NetBanking
+          |             |             |
+          -------- PaymentProcessor --------
+                         |
+                OnlinePaymentProcessor
+Why is this design extensible?
+If we want to add:
+WalletPayment
+we can create:
+class WalletPayment implements Payment {
+
+    public void pay(double amount) {
+        System.out.println("Payment through Wallet");
+    }
+}
+
